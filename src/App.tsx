@@ -1,15 +1,13 @@
-import GeoPosition from './components/geo-position.component'
-import Header from './components/header.component'
-import Hero from './components/hero.component'
-import ParkingPlan from './components/parking-plan.component'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import MainPage from './pages/main.page'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <MainPage />,
+  },
+])
 
 export default function App() {
-  return (
-    <>
-      <Header />
-      <Hero />
-      <ParkingPlan />
-      <GeoPosition />
-    </>
-  )
+  return <RouterProvider router={router} />
 }

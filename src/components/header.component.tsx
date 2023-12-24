@@ -1,5 +1,5 @@
 import { Links } from '../constants/links.constant'
-import Link from './link.component'
+import Link from '../shared-ui/link.component'
 
 export default function Header() {
   return (

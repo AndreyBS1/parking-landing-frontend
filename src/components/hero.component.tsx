@@ -1,4 +1,4 @@
-import Button from './button.component'
+import Button from '../shared-ui/button.component'
 
 export default function Hero() {
   const handleButtonClick = () => {
@@ -16,10 +16,7 @@ export default function Hero() {
         Колотушкина который вмещает в себя миллион машиномест
       </p>
       <div className="flex justify-center">
-        <Button
-          className="py-[1.3rem] px-[1.75rem] font-extrabold"
-          onClick={handleButtonClick}
-        >
+        <Button className="py-[1.3rem] px-[1.75rem]" onClick={handleButtonClick}>
           ЗАБРОНИРОВАТЬ МЕСТО
         </Button>
       </div>
