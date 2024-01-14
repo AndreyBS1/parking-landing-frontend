@@ -49,7 +49,6 @@ export default function ContactForm(props: IContactFormProps) {
 
   const { control, handleSubmit } = useForm<TFormData>({
     resolver: zodResolver(schema),
-    defaultValues: { name: '', phoneNumber: '' },
   })
   const { mutateAsync: createCallRequestMutation } = useMutation({
     mutationFn: createCallRequest,

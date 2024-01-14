@@ -7,16 +7,8 @@ import { queryClient } from '../api/query-client'
 import Button from '../shared-ui/button.component'
 import ControlledCheckbox from '../shared-ui/controlled-checkbox.component'
 import ControlledTextInput from '../shared-ui/controlled-text-input.component'
-
-const PhoneNumberRegExp = /^((\+7)|8)[0-9]{10}$/
-
-const StringSchema = z
-  .string({
-    required_error: 'Пожалуйста, заполните это поле',
-    invalid_type_error: 'Пожалуйста, введите корректные символы',
-  })
-  .trim()
-  .min(1, 'Пожалуйста, заполните это поле')
+import { PhoneNumberRegExp } from '../utils/reg-exps'
+import { StringSchema } from '../utils/validation-schemas'
 
 const schema = z.object({
   name: StringSchema.max(64, 'Слишком длинное имя'),
@@ -51,7 +43,6 @@ export default function ParkingPlaceBookingForm(props: IParkingPlaceBookingFormP
 
   const { control, handleSubmit } = useForm<TFormData>({
     resolver: zodResolver(schema),
-    defaultValues: { name: '', phoneNumber: '', email: '' },
   })
   const { mutateAsync: createPurchaseRequestMutation } = useMutation({
     mutationFn: createPurchaseRequest,
