@@ -54,22 +54,31 @@ export default function PhotoGallery() {
 
   return (
     <>
-      <div id="photo-gallery" className="grid grid-cols-5 bg-additional">
+      <div id="photo-gallery" className="grid grid-cols-1 lg:grid-cols-5 bg-additional">
         {Photos.map((photo, index) =>
           photo !== null ? (
-            <button
-              className={clsx(
-                index === 1 && 'col-start-2 col-end-4 row-start-1 row-end-3'
-              )}
-              onClick={() => setSelectedPhotoIndex(photo !== null ? index : null)}
-            >
+            <>
+              <button
+                className={clsx(
+                  'hidden lg:block',
+                  index === 1 && 'col-start-2 col-end-4 row-start-1 row-end-3'
+                )}
+                onClick={() => setSelectedPhotoIndex(photo !== null ? index : null)}
+              >
+                <img
+                  key={index}
+                  src={photo}
+                  alt=""
+                  className="w-full aspect-video object-cover object-center"
+                />
+              </button>
               <img
                 key={index}
                 src={photo}
                 alt=""
-                className="aspect-video object-cover object-center"
+                className="lg:hidden w-full aspect-video object-cover object-center"
               />
-            </button>
+            </>
           ) : (
             <div key={index} />
           )

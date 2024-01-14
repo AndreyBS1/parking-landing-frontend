@@ -18,7 +18,11 @@ export default function Header() {
       <img src="/images/logo.png" alt="" className="w-[2.65rem]" />
       <div className="flex items-center gap-x-7">
         {Links.map((link) => (
-          <Link key={link.selector} href={link.selector} className="text-white">
+          <Link
+            key={link.selector}
+            href={link.selector}
+            className="hidden lg:block text-white"
+          >
             {link.title}
           </Link>
         ))}

@@ -17,9 +17,9 @@ export default function Footer() {
     <>
       <footer
         id="contacts"
-        className="bg-additional text-white py-14 pl-32 pr-14 flex justify-between items-end"
+        className="bg-additional text-white py-14 px-10 lg:pl-32 lg:pr-14 lg:flex justify-between items-end"
       >
-        <div>
+        <div className="mb-14 lg:mb-0">
           <h2 className="text-5xl font-extrabold">Контакты</h2>
           <p className="mb-6">Адрес: Комендантский проспект 66</p>
           <p className="mb-5">Офис продаж: Комендантский проспект 66 </p>
