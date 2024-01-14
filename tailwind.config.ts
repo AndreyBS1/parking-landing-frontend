@@ -15,10 +15,11 @@ export default {
       'primary-accent': '#9A8452',
       secondary: '#D9D9D9',
       'secondary-accent': '#E4E4E4',
+      additional: '#1D1D1D',
     },
     extend: {
       backgroundImage: {
-        hero: "url('/images/hero.jpg')",
+        hero: "url('/images/hero.jpeg')",
       },
     },
   },

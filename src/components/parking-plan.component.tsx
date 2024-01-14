@@ -55,7 +55,7 @@ export default function ParkingPlan() {
 
   const selectedFloorInfo = FloorRecord[selectedFloor]
   const parkingPlanImage = ParkingPlanImagesRecord[selectedFloor]
-  const parkingPlaces = data.filter((place) => place.floor === selectedFloor).slice(0, 15)
+  const parkingPlaces = data.filter((place) => place.floor === selectedFloor)
   const selectedPlace =
     selectedPlaceId !== null
       ? parkingPlaces.find((place) => place.id === selectedPlaceId)

@@ -57,10 +57,7 @@ export default function ParkingPlacesPage() {
 
   if (isLoading) {
     return (
-      <div
-        id="parking-plan"
-        className="h-[48.5rem] max-w-[1920px] mx-auto flex flex-col justify-center items-center"
-      >
+      <div className="h-[48.5rem] max-w-[1920px] mx-auto flex flex-col justify-center items-center">
         <Loader color="black" />
       </div>
     )
@@ -68,10 +65,7 @@ export default function ParkingPlacesPage() {
 
   if (!data || isError) {
     return (
-      <div
-        id="parking-plan"
-        className="h-[48.5rem] max-w-[1920px] mx-auto flex flex-col justify-center items-center"
-      >
+      <div className="h-[48.5rem] max-w-[1920px] mx-auto flex flex-col justify-center items-center">
         <h2 className="text-3xl mb-2">Похоже, что возникла какая-то ошибка</h2>
         <p className="text-xl mb-6">
           Пожалуйста, попробуйте обновить страницу или зайти позже
@@ -96,7 +90,7 @@ export default function ParkingPlacesPage() {
   })
 
   const handleFilterOptionChange = (
-    option: keyof typeof filterOptions,
+    option: keyof TFilterOptions,
     value: string | null
   ) => {
     setFilterOptions((prevFilterOptions) => ({

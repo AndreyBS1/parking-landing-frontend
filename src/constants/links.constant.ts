@@ -5,8 +5,6 @@ interface ILink {
 
 export const Links: ILink[] = [
   { title: 'ПЛАН ПАРКИНГА', selector: '#parking-plan' },
-  { title: 'МЕСТОПОЛОЖЕНИЕ', selector: '#geo-position' },
-  { title: 'ПРЕИМУЩЕСТВА', selector: '#benefits' },
   { title: 'ФОТОГАЛЕРЕЯ', selector: '#photo-gallery' },
   { title: 'КОНТАКТЫ', selector: '#contacts' },
 ]
