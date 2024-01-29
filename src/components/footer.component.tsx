@@ -20,14 +20,24 @@ export default function Footer() {
         className="bg-additional text-white py-14 px-10 lg:pl-32 lg:pr-14 lg:flex justify-between items-end"
       >
         <div className="mb-14 lg:mb-0">
-          <h2 className="text-5xl font-extrabold">Контакты</h2>
+          <h2 className="text-5xl font-bold">Контакты</h2>
           <p className="mb-6">Адрес: Комендантский проспект 66</p>
           <p className="mb-5">Офис продаж: Комендантский проспект 66 </p>
           <p>Телефон:</p>
-          <Link href="tel:+79999999999" target="_blank" rel="noreferrer">
+          <Link
+            href="tel:+79999999999"
+            target="_blank"
+            rel="noreferrer"
+            className="block"
+          >
             +7 999 999 99 99
           </Link>
-          <Link href="tel:+79999999999" target="_blank" rel="noreferrer" className="mb-3">
+          <Link
+            href="tel:+79999999999"
+            target="_blank"
+            rel="noreferrer"
+            className="block mb-3"
+          >
             +7 999 999 99 99
           </Link>
           <p className="mb-3">

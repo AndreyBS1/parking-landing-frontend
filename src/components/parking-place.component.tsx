@@ -20,7 +20,14 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
   const position = ParkingPlacePositionsRecord[parkingPlace.id]
 
   return (
-    <HoverCard width="25rem" radius="xl" classNames={{ dropdown: 'py-5 px-[2.6rem]' }}>
+    <HoverCard
+      width="22rem"
+      radius="xl"
+      withArrow
+      arrowSize={20}
+      arrowPosition="center"
+      classNames={{ dropdown: 'py-5 px-8' }}
+    >
       <HoverCard.Target>
         <div
           className={clsx('cursor-pointer w-7', className)}
@@ -32,11 +39,11 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
           }}
           {...otherProps}
         >
-          <img src={image} alt="" />
+          {image ? <img src={image} alt="" /> : <div className="w-7 h-[5.35rem]" />}
         </div>
       </HoverCard.Target>
       <HoverCard.Dropdown>
-        <h3 className="mb-4 text-[2rem]">Место №{parkingPlace.id}</h3>
+        <h3 className="mb-2 text-3xl">Место №{parkingPlace.id}</h3>
         <div className="mb-1 flex justify-between">
           <p>ТИП МЕСТА:</p>
           <p className="uppercase">{type}</p>
@@ -60,7 +67,7 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
           </div>
         </div>
         <Button className="w-full py-1" onClick={() => onSelect(parkingPlace.id)}>
-          Подробнее
+          Забронировать
         </Button>
       </HoverCard.Dropdown>
     </HoverCard>

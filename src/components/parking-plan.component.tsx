@@ -8,9 +8,11 @@ import { ParkingPlaceStatusMarkings } from '../constants/parking-place-status-ma
 import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record.constant'
 import { ParkingPlanImagesRecord } from '../constants/parking-plan-images-record'
 import Button from '../shared-ui/button.component'
+import Link from '../shared-ui/link.component'
 import MobileParkingPlace from './mobile-parking-place.component'
 import ParkingPlaceBookingForm from './parking-place-booking-form.component'
 import ParkingPlace from './parking-place.component'
+import Section from './section.component'
 
 enum ModalTypes {
   Form,
@@ -30,27 +32,21 @@ export default function ParkingPlan() {
 
   if (isLoading) {
     return (
-      <div
-        id="parking-plan"
-        className="h-[48.5rem] max-w-[1920px] mx-auto flex flex-col justify-center items-center"
-      >
+      <Section id="parking-plan" className="flex flex-col justify-center items-center">
         <Loader color="#F9B004" />
-      </div>
+      </Section>
     )
   }
 
   if (!data || isError) {
     return (
-      <div
-        id="parking-plan"
-        className="h-[48.5rem] max-w-[1920px] mx-auto flex flex-col justify-center items-center"
-      >
+      <Section id="parking-plan" className="flex flex-col justify-center items-center">
         <h2 className="text-3xl mb-2">Похоже, что возникла какая-то ошибка</h2>
         <p className="text-xl mb-6">
           Пожалуйста, оставьте заявку с помощью формы, и мы свяжемся с вами позже
         </p>
         <Button className="py-[0.8rem] px-[1.75rem]">Оставить заявку</Button>
-      </div>
+      </Section>
     )
   }
 
@@ -72,9 +68,9 @@ export default function ParkingPlan() {
 
   return (
     <>
-      <div
+      <Section
         id="parking-plan"
-        className="hidden mx-auto py-[5.15rem] px-[8.05rem] lg:flex gap-x-[7.25rem]"
+        className="hidden py-[5.15rem] px-[8.05rem] lg:flex items-end gap-x-[7.25rem]"
       >
         <div className="grow relative">
           <img src={parkingPlanImage} alt="" />
@@ -95,17 +91,17 @@ export default function ParkingPlan() {
                   className={clsx(
                     'h-[3.55rem] w-[3.55rem] rounded-full flex justify-center items-center text-[2rem]',
                     Number(floor) === selectedFloor &&
-                      'bg-primary-accent border-primary-accent hover:text-primary-accent hover:border-primary-accent'
+                      'bg-[#666D97] border-[#666D97] hover:text-[#666D97] hover:border-[#666D97]'
                   )}
                   onClick={() => setSelectedFloor(Number(floor))}
                 >
-                  {floor}
+                  {Number(floor) + 1}
                 </Button>
                 <p className="uppercase">ЭТАЖ</p>
               </div>
             ))}
           </div>
-          <p className="text-[2rem] mb-8">{selectedFloorInfo.title}</p>
+          <p className="text-[2rem] mb-4">{selectedFloorInfo.title}</p>
           <div className="flex justify-between items-center">
             <p>ТИП:</p>
             <p>{selectedFloorInfo.type}</p>
@@ -118,30 +114,41 @@ export default function ParkingPlan() {
             <p>МЕСТ В ПРОДАЖЕ:</p>
             <p>{selectedFloorInfo.placesAmount}</p>
           </div>
-          <div className="h-[2px] my-8 bg-black" />
-          <p className="text-[2rem] mb-8">Статус</p>
+          <div className="h-[2px] my-5 bg-black" />
+          <p className="text-[2rem]">Статус</p>
           {ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
             <div
               key={placeStatusMarking.title}
               className="mb-[0.8rem] flex items-center gap-x-5"
             >
               <div
-                className={clsx(
-                  'h-[1.65rem] w-[1.65rem] rounded-full',
-                  placeStatusMarking.color
+                className="h-[1.80rem] w-[1.80rem] rounded-full flex items-center justify-center"
+                style={{ backgroundColor: placeStatusMarking.color }}
+              >
+                {placeStatusMarking.iconText ? (
+                  <p className="text-xs text-white">{placeStatusMarking.iconText}</p>
+                ) : (
+                  <img
+                    src={placeStatusMarking.icon}
+                    alt={placeStatusMarking.title}
+                    className="w-[1.075rem]"
+                  />
                 )}
-              />
+              </div>
               <p>{placeStatusMarking.title}</p>
             </div>
           ))}
-          <div className="h-[2px] mt-14 mb-[1.65rem] bg-black" />
-          <div className="px-[1.8rem] flex justify-between items-center">
-            <img src="/icons/print-icon.svg" alt="" className="h-[2.1rem] w-[2.15rem]" />
-            <img src="/icons/pdf-icon.svg" alt="" className="h-[1.85rem] w-[2.19rem]" />
-            <img src="/icons/mail-icon.svg" alt="" className="h-[1.46rem] w-[2.23rem]" />
-          </div>
+          <div className="h-[2px] mt-10 mb-4 bg-black" />
+          <Link
+            href="tel:+79999999999"
+            target="_blank"
+            rel="noreferrer"
+            className="text-3xl"
+          >
+            +7 999 999 99 99
+          </Link>
         </div>
-      </div>
+      </Section>
 
       <div id="parking-plan" className="lg:hidden">
         <div className="py-14 px-5">

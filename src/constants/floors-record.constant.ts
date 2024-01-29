@@ -7,31 +7,31 @@ interface IFloor {
 
 export const FloorRecord: Record<number, IFloor> = {
   1: {
-    title: 'Первый этаж',
-    type: 'НАЗЕМНЫЙ',
-    deadline: '1 КВ. 2024 Г.',
-    placesAmount: 85,
-  },
-  2: {
     title: 'Второй этаж',
     type: 'НАЗЕМНЫЙ',
     deadline: '1 КВ. 2024 Г.',
     placesAmount: 85,
   },
-  3: {
+  2: {
     title: 'Третий этаж',
     type: 'НАЗЕМНЫЙ',
     deadline: '1 КВ. 2024 Г.',
     placesAmount: 85,
   },
-  4: {
+  3: {
     title: 'Четвертый этаж',
     type: 'НАЗЕМНЫЙ',
     deadline: '1 КВ. 2024 Г.',
     placesAmount: 85,
   },
-  5: {
+  4: {
     title: 'Пятый этаж',
+    type: 'НАЗЕМНЫЙ',
+    deadline: '1 КВ. 2024 Г.',
+    placesAmount: 85,
+  },
+  5: {
+    title: 'Шестой этаж',
     type: 'НАЗЕМНЫЙ',
     deadline: '1 КВ. 2024 Г.',
     placesAmount: 85,

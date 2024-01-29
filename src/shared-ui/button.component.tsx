@@ -8,7 +8,7 @@ export default function MButton(props: IButtonProps) {
   return (
     <button
       className={clsx(
-        'font-extrabold rounded-full border-2 text-white bg-primary border-primary hover:text-primary hover:bg-white active:text-primary-accent active:border-primary-accent transition-colors',
+        'font-bold rounded-full border-2 text-white bg-primary border-primary hover:text-primary hover:bg-white active:text-primary-accent active:border-primary-accent transition-colors',
         className
       )}
       {...otherProps}
