@@ -1,10 +1,8 @@
-import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
 import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 
-export interface IParkingPlace {
+export interface IPantryPlace {
   id: number
   floor: number
-  type: ParkingPlaceTypesEnum
   area: number
   currentPrice: number
   previousPrice: number

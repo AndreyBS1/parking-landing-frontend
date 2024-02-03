@@ -10,6 +10,7 @@ export default {
         70: '#000000B2',
       },
       gray: '#929292',
+      steel: '#666D97',
       red: 'red',
       primary: '#F9B004',
       'primary-accent': '#9A8452',

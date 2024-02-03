@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { ParkingPlaceImagesRecord } from '../constants/parking-place-images-record.component'
-import { ParkingPlacePositionsRecord } from '../constants/parking-place-postions-record'
+import { ParkingPlacePositionsRecord } from '../constants/parking-place-positions-record'
 import { IParkingPlace } from '../types/parking-place.type'
 
 interface IMobileParkingPlaceProps

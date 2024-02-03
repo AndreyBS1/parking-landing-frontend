@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { createPantryPurchaseRequest } from '../api/create-pantry-purchase-request'
 import { createPurchaseRequest } from '../api/create-purschase-request'
 import { queryClient } from '../api/query-client'
 import Button from '../shared-ui/button.component'
@@ -33,13 +34,14 @@ const schema = z.object({
 type TFormData = z.infer<typeof schema>
 
 interface IParkingPlaceBookingFormProps {
-  parkingPlaceId: number
+  placeId: number
+  placeType: 'parking' | 'pantry'
   onSubmit: () => void
   onError: () => void
 }
 
 export default function ParkingPlaceBookingForm(props: IParkingPlaceBookingFormProps) {
-  const { parkingPlaceId, onSubmit, onError } = props
+  const { placeId, placeType, onSubmit, onError } = props
 
   const { control, handleSubmit } = useForm<TFormData>({
     resolver: zodResolver(schema),
@@ -47,16 +49,30 @@ export default function ParkingPlaceBookingForm(props: IParkingPlaceBookingFormP
   const { mutateAsync: createPurchaseRequestMutation } = useMutation({
     mutationFn: createPurchaseRequest,
   })
+  const { mutateAsync: createPantryPurchaseRequestMutation } = useMutation({
+    mutationFn: createPantryPurchaseRequest,
+  })
 
   const handleFormSubmit: SubmitHandler<TFormData> = async (data) => {
     try {
-      await createPurchaseRequestMutation({
-        parkingPlaceId,
-        customerName: data.name,
-        customerEmail: data.email,
-        customerPhoneNumber: data.phoneNumber,
-      })
-      queryClient.invalidateQueries({ queryKey: ['parking-places'] })
+      if (placeType === 'parking') {
+        await createPurchaseRequestMutation({
+          parkingPlaceId: placeId,
+          customerName: data.name,
+          customerEmail: data.email,
+          customerPhoneNumber: data.phoneNumber,
+        })
+        queryClient.invalidateQueries({ queryKey: ['parking-places'] })
+      }
+      if (placeType === 'pantry') {
+        await createPantryPurchaseRequestMutation({
+          pantryPlaceId: placeId,
+          customerName: data.name,
+          customerEmail: data.email,
+          customerPhoneNumber: data.phoneNumber,
+        })
+        queryClient.invalidateQueries({ queryKey: ['pantry-places'] })
+      }
       onSubmit()
     } catch (error) {
       console.error(error)
