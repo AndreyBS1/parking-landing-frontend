@@ -2,14 +2,15 @@ import { Group, Loader, Select } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getParkingPlaces } from '../api/get-parking-places'
+import UpdatePricesForm from '../components/update-prices-form.component'
 import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
 
 const floorFilterData = [
-  { label: '1', value: '1' },
-  { label: '2', value: '2' },
-  { label: '3', value: '3' },
-  { label: '4', value: '4' },
-  { label: '5', value: '5' },
+  { label: '2', value: '1' },
+  { label: '3', value: '2' },
+  { label: '4', value: '3' },
+  { label: '5', value: '4' },
+  { label: '6', value: '5' },
 ]
 
 const placeTypeFilterData = [
@@ -54,7 +55,7 @@ export default function PricesPage() {
   }
 
   const placeExample =
-    data.filter((parkingPlace) => {
+    data.find((parkingPlace) => {
       let isParkingPlaceValid = true
       const { floor, type } = filterOptions
       if (floor && parkingPlace.floor !== Number(floor)) {
@@ -64,7 +65,7 @@ export default function PricesPage() {
         isParkingPlaceValid = false
       }
       return isParkingPlaceValid
-    })[0] || null
+    }) || null
 
   const placeTypeLabel =
     placeTypeFilterData.find(({ value }) => value === filterOptions.type)?.label || ''
@@ -113,12 +114,22 @@ export default function PricesPage() {
       )}
       {filterOptions.type !== null && placeExample !== null && (
         <>
-          <p className="text-lg">
-            Цены для места "{placeTypeLabel}" на{' '}
+          <p className="mb-6 text-lg">
+            Цены для места "{placeTypeLabel}" для{' '}
             {filterOptions.floor === null
               ? 'всех этажей'
               : `${filterOptions.floor} этажа`}
           </p>
+          <UpdatePricesForm
+            placeType={filterOptions.type}
+            floor={filterOptions.floor ?? undefined}
+            defaultValues={{
+              previousPrice: String(placeExample.previousPrice),
+              currentPrice: String(placeExample.currentPrice),
+            }}
+            onSubmit={() => null}
+            onError={() => null}
+          />
         </>
       )}
     </>

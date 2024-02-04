@@ -11,25 +11,24 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { getPurchaseRequests } from '../api/get-purchase-requests'
+import { getPantryPurchaseRequests } from '../api/get-pantry-purchase-requests'
 import { queryClient } from '../api/query-client'
-import { updatePurchaseRequestStatus } from '../api/update-purchase-request-status'
-import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record.constant'
+import { updatePantryPurchaseRequestStatus } from '../api/update-pantry-purchase-request-status'
 import { PurchaseRequestStatusRecord } from '../constants/purchase-request-status-record.constant'
 import { PurchaseRequestStatusesEnum } from '../enums/purchase-request-statuses.enum'
-import { IPurchaseRequest } from '../types/purchase-request.type'
+import { IPantryPurchaseRequest } from '../types/pantry-purchase-request.type'
 
-export default function PurchaseRequestsPage() {
+export default function PantryPurchaseRequestsPage() {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['purchase-requests'],
-    queryFn: getPurchaseRequests,
+    queryKey: ['pantry-purchase-requests'],
+    queryFn: getPantryPurchaseRequests,
   })
   const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure()
   const {
     mutate: updatePurchaseRequestStatusMutation,
     isPending: isUpdateStatusPending,
   } = useMutation({
-    mutationFn: updatePurchaseRequestStatus,
+    mutationFn: updatePantryPurchaseRequestStatus,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['purchase-requests'] })
       closeModal()
@@ -37,7 +36,7 @@ export default function PurchaseRequestsPage() {
   })
 
   const [selectedPurchaseRequest, setSelectedPurchaseRequest] =
-    useState<IPurchaseRequest | null>(null)
+    useState<IPantryPurchaseRequest | null>(null)
 
   if (isLoading) {
     return (
@@ -64,11 +63,7 @@ export default function PurchaseRequestsPage() {
     )
   }
 
-  const parkingPlaceType = selectedPurchaseRequest
-    ? ParkingPlaceTypesRecord[selectedPurchaseRequest.parkingPlace.type]
-    : ''
-
-  const handleShowMoreButtonClick = (purchaseRequest: IPurchaseRequest) => {
+  const handleShowMoreButtonClick = (purchaseRequest: IPantryPurchaseRequest) => {
     setSelectedPurchaseRequest(purchaseRequest)
     openModal()
   }
@@ -122,13 +117,13 @@ export default function PurchaseRequestsPage() {
 
       <Modal
         opened={isModalOpened}
-        title={`Запрос на покупку места №${selectedPurchaseRequest?.parkingPlace.id}`}
+        title={`Запрос на покупку места №${selectedPurchaseRequest?.pantryPlace.id}`}
         centered
         size="lg"
         classNames={{ title: 'text-xl' }}
         onClose={closeModal}
       >
-        <Group grow mb="xl">
+        <Group grow mb="xl" align="top">
           <Stack gap="md">
             <TextInput
               label="Дата оформления запроса"
@@ -156,23 +151,22 @@ export default function PurchaseRequestsPage() {
           <Stack gap="md">
             <TextInput
               label="Площадь места"
-              value={selectedPurchaseRequest?.parkingPlace.area}
+              value={selectedPurchaseRequest?.pantryPlace.area}
               readOnly
               rightSection={<p>м2</p>}
             />
             <TextInput
               label="Старая цена места"
-              value={selectedPurchaseRequest?.parkingPlace.previousPrice || 'Не указана'}
+              value={selectedPurchaseRequest?.pantryPlace.previousPrice || 'Не указана'}
               readOnly
               rightSection={<p>₽</p>}
             />
             <TextInput
               label="Текущая цена места"
-              value={selectedPurchaseRequest?.parkingPlace.currentPrice}
+              value={selectedPurchaseRequest?.pantryPlace.currentPrice}
               readOnly
               rightSection={<p>₽</p>}
             />
-            <TextInput label="Тип места" value={parkingPlaceType} readOnly />
           </Stack>
         </Group>
         {selectedPurchaseRequest?.status === PurchaseRequestStatusesEnum.Idle && (
