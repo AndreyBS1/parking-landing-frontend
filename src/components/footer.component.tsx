@@ -17,38 +17,33 @@ export default function Footer() {
     <>
       <footer
         id="contacts"
-        className="bg-additional text-white py-14 px-10 lg:pl-32 lg:pr-14 lg:flex justify-between items-end"
+        className="bg-additional text-white pt-14 pb-20 px-10 lg:pl-32 lg:pr-14 lg:flex justify-between items-end"
       >
         <div className="mb-14 lg:mb-0">
           <h2 className="text-5xl font-bold">Контакты</h2>
-          <p className="mb-6">Адрес: Комендантский проспект 66</p>
-          <p className="mb-5">Офис продаж: Комендантский проспект 66 </p>
+          <p className="mb-6">
+            Адрес: г. Санкт-Петербург, Комендантский
+            <br />
+            проспект, дом 66, корпус 2
+          </p>
           <p>Телефон:</p>
           <Link
-            href="tel:+79999999999"
+            href="tel:+79117751111"
             target="_blank"
             rel="noreferrer"
-            className="block"
+            className="mb-6 block"
           >
-            +7 999 999 99 99
+            +7 (911) 775-11-11
           </Link>
-          <Link
-            href="tel:+79999999999"
-            target="_blank"
-            rel="noreferrer"
-            className="block mb-3"
-          >
-            +7 999 999 99 99
-          </Link>
-          <p className="mb-3">
+          <p className="mb-12">
             Email:{' '}
             <Link
-              href="mail:example@gmail.com"
+              href="mail:sales@parking-chistoenebo.ru"
               target="_blank"
               rel="noreferrer"
-              className=""
+              className="lowercase"
             >
-              example@gmail.com
+              sales@parking-chistoenebo.ru
             </Link>
           </p>
           <p>
