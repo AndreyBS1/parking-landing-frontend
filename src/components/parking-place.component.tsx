@@ -9,15 +9,16 @@ import { IParkingPlace } from '../types/parking-place.type'
 interface IParkingPlaceProps
   extends Omit<React.ComponentPropsWithoutRef<'div'>, 'children' | 'onSelect'> {
   parkingPlace: IParkingPlace
+  zoom?: number
   onSelect: (parkingPlaceId: number) => void
 }
 
 export default function ParkingPlace(props: IParkingPlaceProps) {
-  const { parkingPlace, onSelect, className, style, ...otherProps } = props
+  const { parkingPlace, zoom = 1, onSelect, className, style, ...otherProps } = props
 
   const image = ParkingPlaceImagesRecord[parkingPlace.status]
   const type = ParkingPlaceTypesRecord[parkingPlace.type]
-  const position = ParkingPlacePositionsRecord[parkingPlace.id]
+  const position = ParkingPlacePositionsRecord[parkingPlace.displayedNo]
 
   return (
     <HoverCard
@@ -26,24 +27,30 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
       withArrow
       arrowSize={20}
       arrowPosition="center"
+      transitionProps={{ duration: 0 }}
       classNames={{ dropdown: 'py-5 px-8' }}
     >
       <HoverCard.Target>
         <div
-          className={clsx('cursor-pointer w-7', className)}
+          className={clsx('cursor-pointer', className)}
           style={{
-            top: `${position.top}rem`,
-            left: `${position.left}rem`,
+            width: `${zoom * 1.75}rem`,
+            top: `${zoom * position.top}rem`,
+            left: `${zoom * position.left}rem`,
             rotate: `${position.rotationDegree}deg`,
             ...style,
           }}
           {...otherProps}
         >
-          {image ? <img src={image} alt="" /> : <div className="w-7 h-[5.35rem]" />}
+          {image ? (
+            <img src={image} alt="" />
+          ) : (
+            <div style={{ height: `${zoom * 5.35}rem`, width: `${zoom * 1.75}rem` }} />
+          )}
         </div>
       </HoverCard.Target>
       <HoverCard.Dropdown>
-        <h3 className="mb-2 text-3xl">Место №{parkingPlace.id}</h3>
+        <h3 className="mb-2 text-3xl">Место №{parkingPlace.displayedNo}</h3>
         <div className="mb-1 flex justify-between">
           <p>ТИП МЕСТА:</p>
           <p className="uppercase">{type}</p>

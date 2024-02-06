@@ -54,6 +54,11 @@ export default function ParkingPlaceBookingForm(props: IParkingPlaceBookingFormP
   })
 
   const handleFormSubmit: SubmitHandler<TFormData> = async (data) => {
+    const bookingLimit = Number(localStorage.getItem('booking_limit') || 0)
+    if (bookingLimit >= 5) {
+      onError?.()
+      return
+    }
     try {
       if (placeType === 'parking') {
         await createPurchaseRequestMutation({
@@ -73,6 +78,7 @@ export default function ParkingPlaceBookingForm(props: IParkingPlaceBookingFormP
         })
         queryClient.invalidateQueries({ queryKey: ['pantry-places'] })
       }
+      localStorage.setItem('booking_limit', String(bookingLimit + 1))
       onSubmit()
     } catch (error) {
       console.error(error)

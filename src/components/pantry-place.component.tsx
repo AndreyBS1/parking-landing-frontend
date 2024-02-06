@@ -9,13 +9,14 @@ import { IPantryPlace } from '../types/pantry-place.type'
 interface IPantryPlaceProps
   extends Omit<React.ComponentPropsWithoutRef<'div'>, 'children' | 'onSelect'> {
   pantryPlace: IPantryPlace
+  zoom?: number
   onSelect: (pantryPlaceId: number) => void
 }
 
 export default function PantryPlace(props: IPantryPlaceProps) {
-  const { pantryPlace, onSelect, className, style, ...otherProps } = props
+  const { pantryPlace, zoom = 1, onSelect, className, style, ...otherProps } = props
 
-  const position = PantryPlacePositionsRecord[pantryPlace.id]
+  const position = PantryPlacePositionsRecord[pantryPlace.displayedNo]
   const image = PantryPlaceImagesRecord[position.imageType][pantryPlace.status]
   const imageSize = PantryPlaceImageSizeRecord[position.imageType]
 
@@ -32,18 +33,18 @@ export default function PantryPlace(props: IPantryPlaceProps) {
         <div
           className={clsx('cursor-pointer', className)}
           style={{
-            width: `${imageSize.width}em`,
-            top: `${position.top}em`,
-            left: `${position.left}em`,
+            width: `${zoom * imageSize.width}rem`,
+            top: `${zoom * position.top}rem`,
+            left: `${zoom * position.left}rem`,
             ...style,
           }}
           {...otherProps}
         >
-          {image ? <img src={image} alt="" /> : <div className="w-7 h-[5.35rem]" />}
+          <img src={image} alt="" />
         </div>
       </HoverCard.Target>
       <HoverCard.Dropdown>
-        <h3 className="mb-2 text-3xl">Кладовая №{pantryPlace.id}</h3>
+        <h3 className="mb-2 text-3xl">Кладовая №{pantryPlace.displayedNo}</h3>
         <div className="h-16 flex justify-between">
           <p>СТОИМОСТЬ:</p>
           <div>

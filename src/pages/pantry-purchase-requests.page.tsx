@@ -169,16 +169,30 @@ export default function PantryPurchaseRequestsPage() {
             />
           </Stack>
         </Group>
-        {selectedPurchaseRequest?.status === PurchaseRequestStatusesEnum.Idle && (
-          <Group grow>
+        <Group grow>
+          <Button
+            variant="outline"
+            loading={isUpdateStatusPending}
+            classNames={{ root: 'border-black', label: 'text-black' }}
+            onClick={closeModal}
+          >
+            Закрыть
+          </Button>
+          {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Idle && (
             <Button
-              variant="outline"
               loading={isUpdateStatusPending}
-              classNames={{ root: 'border-black', label: 'text-black' }}
-              onClick={closeModal}
+              classNames={{ root: 'bg-black' }}
+              onClick={() =>
+                updatePurchaseRequestStatusMutation({
+                  id: selectedPurchaseRequest?.id || 0,
+                  status: PurchaseRequestStatusesEnum.Idle,
+                })
+              }
             >
-              Закрыть
+              Сбросить
             </Button>
+          )}
+          {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Rejected && (
             <Button
               loading={isUpdateStatusPending}
               classNames={{ root: 'bg-black' }}
@@ -191,6 +205,8 @@ export default function PantryPurchaseRequestsPage() {
             >
               Отклонить
             </Button>
+          )}
+          {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Approved && (
             <Button
               loading={isUpdateStatusPending}
               classNames={{ root: 'bg-black' }}
@@ -203,8 +219,8 @@ export default function PantryPurchaseRequestsPage() {
             >
               Одобрить
             </Button>
-          </Group>
-        )}
+          )}
+        </Group>
       </Modal>
     </>
   )

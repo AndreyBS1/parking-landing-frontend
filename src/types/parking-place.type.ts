@@ -3,6 +3,7 @@ import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 
 export interface IParkingPlace {
   id: number
+  displayedNo: number
   floor: number
   type: ParkingPlaceTypesEnum
   area: number

@@ -6,12 +6,12 @@ export default function Header() {
       <img src="/images/logo.png" alt="" className="w-[2.65rem]" />
       <div className="flex items-center gap-x-7">
         <Link
-          href="tel:+79999999999"
+          href="tel:+79117751111"
           target="_blank"
           rel="noreferrer"
           className="text-white"
         >
-          +7 999 999 99 99
+          +7 (911) 775-11-11
         </Link>
       </div>
     </header>

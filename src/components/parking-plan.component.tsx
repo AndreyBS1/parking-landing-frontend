@@ -12,7 +12,6 @@ import Button from '../shared-ui/button.component'
 import Link from '../shared-ui/link.component'
 import { IPantryPlace } from '../types/pantry-place.type'
 import { IParkingPlace } from '../types/parking-place.type'
-import MobileParkingPlace from './mobile-parking-place.component'
 import PantryPlace from './pantry-place.component'
 import ParkingPlaceBookingForm from './parking-place-booking-form.component'
 import ParkingPlace from './parking-place.component'
@@ -50,6 +49,8 @@ export default function ParkingPlan() {
     type: 'parking' | 'pantry'
   } | null>(null)
   const [openedModalType, setOpenedModalType] = useState<ModalTypes | null>(null)
+
+  const [zoom, setZoom] = useState(0.5)
 
   if (isParkingPlacesLoading || isPantryPlacesLoading) {
     return (
@@ -106,13 +107,25 @@ export default function ParkingPlan() {
     }
   }
 
+  const handleZoomIncrease = () => {
+    if (zoom < 1) {
+      setZoom((prevZoom) => prevZoom + 0.1)
+    }
+  }
+
+  const handleZoomDecrease = () => {
+    if (zoom > 0.5) {
+      setZoom((prevZoom) => prevZoom - 0.1)
+    }
+  }
+
   return (
     <>
       <Section
         id="parking-plan"
-        className="hidden py-[5.15rem] px-[8.05rem] lg:flex items-end gap-x-[7.25rem]"
+        className="hidden py-[5.15rem] px-[8.05rem] lg:flex items-end lg:gap-x-[7.25rem]"
       >
-        <div className="grow relative">
+        <div className="order-2 lg:order-1 grow relative">
           <img src={parkingPlanImage} alt="" />
           {floorParkingPlaces.map((parkingPlace) => (
             <ParkingPlace
@@ -131,7 +144,7 @@ export default function ParkingPlan() {
             />
           ))}
         </div>
-        <div className="w-fit">
+        <div className="order-1 lg:order-2 w-fit">
           <div className="mb-[1.05rem] flex gap-x-[1.4rem]">
             {FloorRecordEntries.map(([floor]) => (
               <div key={floor} className="flex flex-col items-center gap-y-[0.7rem]">
@@ -188,18 +201,18 @@ export default function ParkingPlan() {
           ))}
           <div className="h-[2px] mt-10 mb-4 bg-black" />
           <Link
-            href="tel:+79999999999"
+            href="tel:+79117751111"
             target="_blank"
             rel="noreferrer"
             className="text-3xl"
           >
-            +7 999 999 99 99
+            +7 (911) 775-11-11
           </Link>
         </div>
       </Section>
 
-      <div id="parking-plan" className="lg:hidden">
-        <div className="py-14 px-5">
+      <Section id="parking-plan" className="lg:hidden py-14 px-5">
+        <div className="mb-28">
           <div className="mb-[1.05rem] flex gap-x-[1.4rem]">
             {FloorRecordEntries.map(([floor]) => (
               <div key={floor} className="flex flex-col items-center gap-y-[0.7rem]">
@@ -207,101 +220,98 @@ export default function ParkingPlan() {
                   className={clsx(
                     'h-[3.55rem] w-[3.55rem] rounded-full flex justify-center items-center text-[2rem]',
                     Number(floor) === selectedFloor &&
-                      'bg-primary-accent border-primary-accent hover:text-primary-accent hover:border-primary-accent'
+                      'bg-steel border-steel hover:text-steel hover:border-steel'
                   )}
                   onClick={() => setSelectedFloor(Number(floor))}
                 >
-                  {floor}
+                  {Number(floor) + 1}
                 </Button>
                 <p className="uppercase">ЭТАЖ</p>
               </div>
             ))}
           </div>
-          <p className="text-[2rem] mb-8">{selectedFloorInfo.title}</p>
-          <div className="flex justify-between items-center">
+          <p className="text-3xl mb-6">{selectedFloorInfo.title}</p>
+          <div className="mb-3 flex justify-between items-center">
             <p>ТИП:</p>
             <p>{selectedFloorInfo.type}</p>
           </div>
-          <div className="flex justify-between items-center">
-            <p>СРОК СДАЧИ:</p>
+          <div className="mb-3 flex justify-between items-center">
+            <p>СРОК ПЕРЕДАЧИ:</p>
             <p>{selectedFloorInfo.deadline}</p>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="mb-3 flex justify-between items-center">
             <p>МЕСТ В ПРОДАЖЕ:</p>
             <p>{selectedFloorInfo.placesAmount}</p>
           </div>
-          <div className="h-[2px] my-8 bg-black" />
-          <p className="text-[2rem] mb-8">Статус</p>
+          <div className="h-[2px] my-5 bg-black" />
+          <p className="mb-6 text-3xl">Статус</p>
           {ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
             <div
               key={placeStatusMarking.title}
-              className="mb-[0.8rem] flex items-center gap-x-5"
+              className="mb-4 flex items-center gap-x-5"
             >
               <div
-                className={clsx(
-                  'h-[1.65rem] w-[1.65rem] rounded-full',
-                  placeStatusMarking.color
+                className="h-[1.80rem] w-[1.80rem] rounded-full flex items-center justify-center"
+                style={{ backgroundColor: placeStatusMarking.color }}
+              >
+                {placeStatusMarking.iconText ? (
+                  <p className="text-xs text-white">{placeStatusMarking.iconText}</p>
+                ) : (
+                  <img
+                    src={placeStatusMarking.icon}
+                    alt={placeStatusMarking.title}
+                    className="w-[1.075rem]"
+                  />
                 )}
-              />
+              </div>
               <p>{placeStatusMarking.title}</p>
             </div>
           ))}
-          <div className="h-[2px] mt-14 mb-[1.65rem] bg-black" />
-          <div className="px-[1.8rem] flex justify-between items-center">
-            <img src="/icons/print-icon.svg" alt="" className="h-[2.1rem] w-[2.15rem]" />
-            <img src="/icons/pdf-icon.svg" alt="" className="h-[1.85rem] w-[2.19rem]" />
-            <img src="/icons/mail-icon.svg" alt="" className="h-[1.46rem] w-[2.23rem]" />
-          </div>
+          <div className="h-[2px] mt-10 mb-4 bg-black" />
+          <Link
+            href="tel:+79117751111"
+            target="_blank"
+            rel="noreferrer"
+            className="text-3xl"
+          >
+            +7 (911) 775-11-11
+          </Link>
         </div>
-        <div className="overflow-auto relative mb-14">
-          <div className="w-[53.4rem]">
-            <img src={parkingPlanImage} alt="" className="w-full" />
-          </div>
-          {parkingPlaces.map((parkingPlace) => (
-            <MobileParkingPlace
+        <div className="overflow-auto relative">
+          <img
+            src={parkingPlanImage}
+            alt=""
+            className="max-w-none"
+            style={{ width: `${zoom * 53}rem` }}
+          />
+          {floorParkingPlaces.map((parkingPlace) => (
+            <ParkingPlace
               key={parkingPlace.id}
               parkingPlace={parkingPlace}
+              zoom={zoom}
               className="absolute"
-              onClick={() =>
-                setSelectedPlaceInfo({ id: parkingPlace.id, type: 'parking' })
-              }
+              onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
+            />
+          ))}
+          {floorPantryPlaces.map((pantryPlace) => (
+            <PantryPlace
+              key={pantryPlace.id}
+              pantryPlace={pantryPlace}
+              zoom={zoom}
+              className="absolute"
+              onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
             />
           ))}
         </div>
-        {!!selectedPlace && (
-          <div className="px-5 mb-14">
-            <h3 className="mb-4 text-[2rem]">Место №{selectedPlace.id}</h3>
-            <div className="mb-1 flex justify-between">
-              <p>ТИП МЕСТА:</p>
-              <p className="uppercase">{selectedPlaceType}</p>
-            </div>
-            <div className="h-16 flex justify-between">
-              <p>СТОИМОСТЬ:</p>
-              <div>
-                {selectedPlace.previousPrice > 0 && (
-                  <NumberFormatter
-                    suffix="₽"
-                    thousandSeparator=" "
-                    value={selectedPlace.previousPrice}
-                    className="block line-through"
-                  />
-                )}
-                <NumberFormatter
-                  suffix="₽"
-                  thousandSeparator=" "
-                  value={selectedPlace.currentPrice}
-                />
-              </div>
-            </div>
-            <Button
-              className="w-full py-1"
-              onClick={() => setOpenedModalType(ModalTypes.ParkingForm)}
-            >
-              Подробнее
-            </Button>
-          </div>
-        )}
-      </div>
+        <div className="mt-6 flex justify-center items-center gap-x-6">
+          <Button className="w-8 text-xl" onClick={handleZoomDecrease}>
+            -
+          </Button>
+          <Button className="w-8 text-xl" onClick={handleZoomIncrease}>
+            +
+          </Button>
+        </div>
+      </Section>
 
       <Modal
         opened={openedModalType === ModalTypes.ParkingForm}
@@ -318,7 +328,9 @@ export default function ParkingPlan() {
         closeButtonProps={{ size: 'xl' }}
         onClose={() => setOpenedModalType(null)}
       >
-        <h1 className="mb-5 text-xl lg:text-[2rem]">Место №{selectedPlace?.id}</h1>
+        <h1 className="mb-5 text-xl lg:text-[2rem]">
+          Место №{selectedPlace?.displayedNo}
+        </h1>
         <div className="lg:flex gap-x-12">
           <div className="flex gap-x-4">
             <p>Площадь:</p>
@@ -370,7 +382,9 @@ export default function ParkingPlan() {
         closeButtonProps={{ size: 'xl' }}
         onClose={() => setOpenedModalType(null)}
       >
-        <h1 className="mb-5 text-xl lg:text-[2rem]">Кладовая №{selectedPlace?.id}</h1>
+        <h1 className="mb-5 text-xl lg:text-[2rem]">
+          Кладовая №{selectedPlace?.displayedNo}
+        </h1>
         <div className="lg:flex gap-x-12">
           <div className="flex gap-x-4">
             <p>Площадь:</p>
