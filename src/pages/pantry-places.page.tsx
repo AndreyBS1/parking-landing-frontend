@@ -15,6 +15,7 @@ import { useState } from 'react'
 import { getPantryPlaces } from '../api/get-pantry-places'
 import PantryPlaceUpdateForm from '../components/pantry-place-update-form.component'
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
+import { PlacePriceTypesEnum } from '../enums/place-price-types.enum'
 import { IPantryPlace } from '../types/pantry-place.type'
 
 const floorFilterData = [
@@ -25,9 +26,15 @@ const floorFilterData = [
   { label: '6', value: '5' },
 ]
 
+const priceTypeFilterData = [
+  { label: 'Со скидкой', value: String(PlacePriceTypesEnum.Promotional) },
+  { label: 'Без скидки', value: String(PlacePriceTypesEnum.NonPromotional) },
+]
+
 type TFilterOptions = {
   number: string | null
   floor: string | null
+  priceType: string | null
 }
 
 export default function PantryPlacesPage() {
@@ -40,6 +47,7 @@ export default function PantryPlacesPage() {
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
     number: null,
     floor: null,
+    priceType: null,
   })
   const [selectedPantryPlace, setSelectedPantryPlace] = useState<IPantryPlace | null>(
     null
@@ -67,12 +75,27 @@ export default function PantryPlacesPage() {
   const filteredData = data
     .filter((pantryPlace) => {
       let isPantryPlaceValid = true
-      const { number, floor } = filterOptions
+      const { number, floor, priceType } = filterOptions
       if (number && !String(pantryPlace.displayedNo).startsWith(number)) {
         isPantryPlaceValid = false
       }
       if (floor && pantryPlace.floor !== Number(floor)) {
         isPantryPlaceValid = false
+      }
+      if (priceType !== null) {
+        const priceTypeValue = Number(priceType)
+        if (
+          priceTypeValue === PlacePriceTypesEnum.Promotional &&
+          pantryPlace.previousPrice === 0
+        ) {
+          isPantryPlaceValid = false
+        }
+        if (
+          priceTypeValue === PlacePriceTypesEnum.NonPromotional &&
+          pantryPlace.previousPrice !== 0
+        ) {
+          isPantryPlaceValid = false
+        }
       }
       return isPantryPlaceValid
     })
@@ -111,6 +134,13 @@ export default function PantryPlacesPage() {
           data={floorFilterData}
           value={filterOptions.floor}
           onChange={(value) => handleFilterOptionChange('floor', value)}
+        />
+        <Select
+          label="Тип цены"
+          placeholder="Выберите тип"
+          data={priceTypeFilterData}
+          value={filterOptions.priceType}
+          onChange={(value) => handleFilterOptionChange('priceType', value)}
         />
       </Group>
       <Table striped={filteredData.length > 0} highlightOnHover={filteredData.length > 0}>
@@ -170,7 +200,7 @@ export default function PantryPlacesPage() {
 
       <Modal
         opened={isModalOpened}
-        title={`Парковочное место №${selectedPantryPlace?.id}`}
+        title={`Кладовое место №${selectedPantryPlace?.displayedNo}`}
         centered
         classNames={{ title: 'text-xl' }}
         onClose={closeModal}

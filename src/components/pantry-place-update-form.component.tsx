@@ -11,7 +11,6 @@ import { StringSchema } from '../utils/validation-schemas'
 const schema = z.object({
   previousPrice: StringSchema,
   currentPrice: StringSchema,
-  placeType: StringSchema,
 })
 
 type TFormData = z.infer<typeof schema>

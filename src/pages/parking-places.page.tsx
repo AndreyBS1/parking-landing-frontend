@@ -17,6 +17,7 @@ import ParkingPlaceUpdateForm from '../components/parking-place-update-form.comp
 import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record.constant'
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
 import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
+import { PlacePriceTypesEnum } from '../enums/place-price-types.enum'
 import { IParkingPlace } from '../types/parking-place.type'
 
 const floorFilterData = [
@@ -33,10 +34,16 @@ const placeTypeFilterData = [
   { label: 'Премиум', value: String(ParkingPlaceTypesEnum.Premium) },
 ]
 
+const priceTypeFilterData = [
+  { label: 'Со скидкой', value: String(PlacePriceTypesEnum.Promotional) },
+  { label: 'Без скидки', value: String(PlacePriceTypesEnum.NonPromotional) },
+]
+
 type TFilterOptions = {
   number: string | null
   floor: string | null
   type: string | null
+  priceType: string | null
 }
 
 export default function ParkingPlacesPage() {
@@ -50,6 +57,7 @@ export default function ParkingPlacesPage() {
     number: null,
     floor: null,
     type: null,
+    priceType: null,
   })
   const [selectedParkingPlace, setSelectedParkingPlace] = useState<IParkingPlace | null>(
     null
@@ -76,7 +84,7 @@ export default function ParkingPlacesPage() {
 
   const filteredData = data.filter((parkingPlace) => {
     let isParkingPlaceValid = true
-    const { number, floor, type } = filterOptions
+    const { number, floor, type, priceType } = filterOptions
     if (number && !String(parkingPlace.displayedNo).startsWith(number)) {
       isParkingPlaceValid = false
     }
@@ -85,6 +93,21 @@ export default function ParkingPlacesPage() {
     }
     if (type && parkingPlace.type !== Number(type)) {
       isParkingPlaceValid = false
+    }
+    if (priceType !== null) {
+      const priceTypeValue = Number(priceType)
+      if (
+        priceTypeValue === PlacePriceTypesEnum.Promotional &&
+        parkingPlace.previousPrice === 0
+      ) {
+        isParkingPlaceValid = false
+      }
+      if (
+        priceTypeValue === PlacePriceTypesEnum.NonPromotional &&
+        parkingPlace.previousPrice !== 0
+      ) {
+        isParkingPlaceValid = false
+      }
     }
     return isParkingPlaceValid
   })
@@ -129,6 +152,13 @@ export default function ParkingPlacesPage() {
           data={placeTypeFilterData}
           value={filterOptions.type}
           onChange={(value) => handleFilterOptionChange('type', value)}
+        />
+        <Select
+          label="Тип цены"
+          placeholder="Выберите тип"
+          data={priceTypeFilterData}
+          value={filterOptions.priceType}
+          onChange={(value) => handleFilterOptionChange('priceType', value)}
         />
       </Group>
       <Table striped={filteredData.length > 0} highlightOnHover={filteredData.length > 0}>
@@ -190,7 +220,7 @@ export default function ParkingPlacesPage() {
 
       <Modal
         opened={isModalOpened}
-        title={`Парковочное место №${selectedParkingPlace?.id}`}
+        title={`Парковочное место №${selectedParkingPlace?.displayedNo}`}
         centered
         classNames={{ title: 'text-xl' }}
         onClose={closeModal}
