@@ -33,14 +33,14 @@ const schema = z.object({
 
 type TFormData = z.infer<typeof schema>
 
-interface IParkingPlaceBookingFormProps {
+interface IPlaceBookingFormProps {
   placeId: number
   placeType: 'parking' | 'pantry'
   onSubmit: () => void
   onError: () => void
 }
 
-export default function ParkingPlaceBookingForm(props: IParkingPlaceBookingFormProps) {
+export default function PlaceBookingForm(props: IPlaceBookingFormProps) {
   const { placeId, placeType, onSubmit, onError } = props
 
   const { control, handleSubmit } = useForm<TFormData>({
@@ -98,6 +98,7 @@ export default function ParkingPlaceBookingForm(props: IParkingPlaceBookingFormP
         control={control}
         name="phoneNumber"
         label="Ваш телефон"
+        prefix="+7"
         className="mb-4"
       />
       <ControlledTextInput

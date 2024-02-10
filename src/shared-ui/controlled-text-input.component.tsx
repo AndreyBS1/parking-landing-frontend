@@ -10,7 +10,7 @@ interface IControlledTextInputProps<T extends FieldValues> extends TControlledIn
 export default function ControlledTextInput<T extends FieldValues>(
   props: IControlledTextInputProps<T>
 ) {
-  const { name, control, label, className, ...otherProps } = props
+  const { name, control, label, prefix, className, ...otherProps } = props
 
   const id = useId()
   const { field, fieldState } = useController({ name, control })
@@ -22,15 +22,18 @@ export default function ControlledTextInput<T extends FieldValues>(
           {label}
         </label>
       ) : null}
-      <input
-        {...otherProps}
-        {...field}
-        id={id}
-        className={clsx(
-          'w-full mb-2 py-1 border-b border-black placeholder:text-gray focus:border-primary focus-visible:outline-none transition',
-          fieldState.error && 'text-red focus:border-red'
-        )}
-      />
+      <div className="mb-2 flex gap-1 items-center">
+        {prefix ? <p>{prefix}</p> : null}
+        <input
+          {...otherProps}
+          {...field}
+          id={id}
+          className={clsx(
+            'grow py-1 border-b border-black placeholder:text-gray focus:border-primary focus-visible:outline-none transition',
+            fieldState.error && 'text-red focus:border-red'
+          )}
+        />
+      </div>
       <div className="min-h-[1.25rem]">
         {fieldState.error?.message ? (
           <p className="text-xs text-red">{fieldState.error.message}</p>

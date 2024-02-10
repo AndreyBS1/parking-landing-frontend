@@ -13,8 +13,8 @@ import Link from '../shared-ui/link.component'
 import { IPantryPlace } from '../types/pantry-place.type'
 import { IParkingPlace } from '../types/parking-place.type'
 import PantryPlace from './pantry-place.component'
-import ParkingPlaceBookingForm from './parking-place-booking-form.component'
 import ParkingPlace from './parking-place.component'
+import PlaceBookingForm from './place-booking-form.component'
 import Section from './section.component'
 
 enum ModalTypes {
@@ -359,7 +359,7 @@ export default function ParkingPlan() {
             </div>
           </div>
         </div>
-        <ParkingPlaceBookingForm
+        <PlaceBookingForm
           placeId={selectedPlaceInfo?.id || 0}
           placeType="parking"
           onSubmit={() => setOpenedModalType(ModalTypes.Success)}
@@ -409,7 +409,7 @@ export default function ParkingPlan() {
             </div>
           </div>
         </div>
-        <ParkingPlaceBookingForm
+        <PlaceBookingForm
           placeId={selectedPlaceInfo?.id || 0}
           placeType="pantry"
           onSubmit={() => setOpenedModalType(ModalTypes.Success)}
