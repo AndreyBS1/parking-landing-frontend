@@ -1,19 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Group, NumberInput, Select, Stack, TextInput } from '@mantine/core'
+import { Button, Group, NumberInput, Stack, TextInput } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { queryClient } from '../api/query-client'
-import { updateParkingPlace } from '../api/update-parking-place'
-import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
-import { IParkingPlace } from '../types/parking-place.type'
+import { updatePantryPlace } from '../api/update-pantry-place'
+import { IPantryPlace } from '../types/pantry-place.type'
 import { StringSchema } from '../utils/validation-schemas'
-
-const placeTypeData = [
-  { label: 'Cтандарт', value: String(ParkingPlaceTypesEnum.Standard) },
-  { label: 'Комфорт', value: String(ParkingPlaceTypesEnum.Comfort) },
-  { label: 'Премиум', value: String(ParkingPlaceTypesEnum.Premium) },
-]
 
 const schema = z.object({
   previousPrice: StringSchema,
@@ -23,36 +16,34 @@ const schema = z.object({
 
 type TFormData = z.infer<typeof schema>
 
-interface IParkingPlaceUpdateFormProps {
-  parkingPlace: IParkingPlace
+interface IPantryPlaceUpdateFormProps {
+  pantryPlace: IPantryPlace
   onSubmit: () => void
   onCancel: () => void
 }
 
-export default function ParkingPlaceUpdateForm(props: IParkingPlaceUpdateFormProps) {
-  const { parkingPlace, onSubmit, onCancel } = props
+export default function PantryPlaceUpdateForm(props: IPantryPlaceUpdateFormProps) {
+  const { pantryPlace, onSubmit, onCancel } = props
 
   const { control, handleSubmit } = useForm<TFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      previousPrice: String(parkingPlace.previousPrice),
-      currentPrice: String(parkingPlace.currentPrice),
-      placeType: String(parkingPlace.type),
+      previousPrice: String(pantryPlace.previousPrice),
+      currentPrice: String(pantryPlace.currentPrice),
     },
   })
-  const { mutateAsync: updateParkingPlaceMutation } = useMutation({
-    mutationFn: updateParkingPlace,
+  const { mutateAsync: updatePantryPlaceMutation } = useMutation({
+    mutationFn: updatePantryPlace,
   })
 
   const handleFormSubmit: SubmitHandler<TFormData> = async (data) => {
     try {
-      await updateParkingPlaceMutation({
-        ...parkingPlace,
-        type: Number(data.placeType),
+      await updatePantryPlaceMutation({
+        ...pantryPlace,
         previousPrice: Number(data.previousPrice),
         currentPrice: Number(data.currentPrice),
       })
-      queryClient.invalidateQueries({ queryKey: ['parking-places'] })
+      queryClient.invalidateQueries({ queryKey: ['pantry-places'] })
       onSubmit()
     } catch (error) {
       console.error(error)
@@ -64,7 +55,7 @@ export default function ParkingPlaceUpdateForm(props: IParkingPlaceUpdateFormPro
       <Stack gap="md" mb="xl">
         <TextInput
           label="Площадь"
-          value={parkingPlace.area}
+          value={pantryPlace.area}
           readOnly
           rightSection={<p>м2</p>}
         />
@@ -91,18 +82,6 @@ export default function ParkingPlaceUpdateForm(props: IParkingPlaceUpdateFormPro
               error={error?.message}
               rightSection={<p>₽</p>}
               onChange={(value) => field.onChange(String(value))}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="placeType"
-          render={({ field, fieldState: { error } }) => (
-            <Select
-              {...field}
-              label="Тип места"
-              data={placeTypeData}
-              error={error?.message}
             />
           )}
         />

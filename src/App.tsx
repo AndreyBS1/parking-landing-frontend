@@ -3,6 +3,7 @@ import AuthPage from './pages/auth.page'
 import CallRequestsPage from './pages/call-requests.page'
 import DashboardPage from './pages/dashboard.page'
 import MainPage from './pages/main.page'
+import PantryPlacesPage from './pages/pantry-places.page'
 import PantryPurchaseRequestsPage from './pages/pantry-purchase-requests.page'
 import ParkingPlacesPage from './pages/parking-places.page'
 import PricesPage from './pages/prices.page'
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
           {
             path: 'parking-places',
             element: <ParkingPlacesPage />,
+          },
+          {
+            path: 'pantry-places',
+            element: <PantryPlacesPage />,
           },
           {
             path: 'purchase-requests',

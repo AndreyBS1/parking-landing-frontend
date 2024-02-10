@@ -12,6 +12,7 @@ export const Links: ILink[] = [
 export const AdminLinks = [
   { title: 'Цены', href: '/admin/dashboard/prices' },
   { title: 'Парковочные места', href: '/admin/dashboard/parking-places' },
+  { title: 'Кладовые места', href: '/admin/dashboard/pantry-places' },
   { title: 'Заявки на покупку', href: '/admin/dashboard/purchase-requests' },
   {
     title: 'Заявки на покупку кладовой',

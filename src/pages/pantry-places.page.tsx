@@ -12,12 +12,10 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { getParkingPlaces } from '../api/get-parking-places'
-import ParkingPlaceUpdateForm from '../components/parking-place-update-form.component'
-import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record.constant'
+import { getPantryPlaces } from '../api/get-pantry-places'
+import PantryPlaceUpdateForm from '../components/pantry-place-update-form.component'
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
-import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
-import { IParkingPlace } from '../types/parking-place.type'
+import { IPantryPlace } from '../types/pantry-place.type'
 
 const floorFilterData = [
   { label: '2', value: '1' },
@@ -27,31 +25,23 @@ const floorFilterData = [
   { label: '6', value: '5' },
 ]
 
-const placeTypeFilterData = [
-  { label: 'Cтандарт', value: String(ParkingPlaceTypesEnum.Standard) },
-  { label: 'Комфорт', value: String(ParkingPlaceTypesEnum.Comfort) },
-  { label: 'Премиум', value: String(ParkingPlaceTypesEnum.Premium) },
-]
-
 type TFilterOptions = {
   number: string | null
   floor: string | null
-  type: string | null
 }
 
-export default function ParkingPlacesPage() {
+export default function PantryPlacesPage() {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['parking-places'],
-    queryFn: getParkingPlaces,
+    queryKey: ['pantry-places'],
+    queryFn: getPantryPlaces,
   })
   const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure()
 
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
     number: null,
     floor: null,
-    type: null,
   })
-  const [selectedParkingPlace, setSelectedParkingPlace] = useState<IParkingPlace | null>(
+  const [selectedPantryPlace, setSelectedPantryPlace] = useState<IPantryPlace | null>(
     null
   )
 
@@ -74,20 +64,19 @@ export default function ParkingPlacesPage() {
     )
   }
 
-  const filteredData = data.filter((parkingPlace) => {
-    let isParkingPlaceValid = true
-    const { number, floor, type } = filterOptions
-    if (number && !String(parkingPlace.displayedNo).startsWith(number)) {
-      isParkingPlaceValid = false
-    }
-    if (floor && parkingPlace.floor !== Number(floor)) {
-      isParkingPlaceValid = false
-    }
-    if (type && parkingPlace.type !== Number(type)) {
-      isParkingPlaceValid = false
-    }
-    return isParkingPlaceValid
-  })
+  const filteredData = data
+    .filter((pantryPlace) => {
+      let isPantryPlaceValid = true
+      const { number, floor } = filterOptions
+      if (number && !String(pantryPlace.displayedNo).startsWith(number)) {
+        isPantryPlaceValid = false
+      }
+      if (floor && pantryPlace.floor !== Number(floor)) {
+        isPantryPlaceValid = false
+      }
+      return isPantryPlaceValid
+    })
+    .sort((placeA, placeB) => placeA.displayedNo - placeB.displayedNo)
 
   const handleFilterOptionChange = (
     option: keyof TFilterOptions,
@@ -99,8 +88,8 @@ export default function ParkingPlacesPage() {
     }))
   }
 
-  const handleUpdateButtonClick = (parkingPlace: IParkingPlace) => {
-    setSelectedParkingPlace(parkingPlace)
+  const handleUpdateButtonClick = (pantryPlace: IPantryPlace) => {
+    setSelectedPantryPlace(pantryPlace)
     openModal()
   }
 
@@ -123,19 +112,11 @@ export default function ParkingPlacesPage() {
           value={filterOptions.floor}
           onChange={(value) => handleFilterOptionChange('floor', value)}
         />
-        <Select
-          label="Тип места"
-          placeholder="Выберите тип"
-          data={placeTypeFilterData}
-          value={filterOptions.type}
-          onChange={(value) => handleFilterOptionChange('type', value)}
-        />
       </Group>
       <Table striped={filteredData.length > 0} highlightOnHover={filteredData.length > 0}>
         <Table.Thead>
           <Table.Th>№</Table.Th>
           <Table.Th>Этаж</Table.Th>
-          <Table.Th>Тип</Table.Th>
           <Table.Th>Цена</Table.Th>
           <Table.Th>Статус</Table.Th>
           <Table.Th></Table.Th>
@@ -150,35 +131,34 @@ export default function ParkingPlacesPage() {
               </Table.Td>
             </Table.Tr>
           )}
-          {filteredData.map((parkingPlace) => (
-            <Table.Tr key={parkingPlace.id}>
-              <Table.Td>{parkingPlace.displayedNo}</Table.Td>
-              <Table.Td>{parkingPlace.floor + 1}</Table.Td>
-              <Table.Td>{ParkingPlaceTypesRecord[parkingPlace.type]}</Table.Td>
+          {filteredData.map((pantryPlace) => (
+            <Table.Tr key={pantryPlace.id}>
+              <Table.Td>{pantryPlace.displayedNo}</Table.Td>
+              <Table.Td>{pantryPlace.floor + 1}</Table.Td>
               <Table.Td>
-                {parkingPlace.previousPrice > 0 && (
+                {pantryPlace.previousPrice > 0 && (
                   <NumberFormatter
                     suffix="₽"
                     thousandSeparator=" "
-                    value={parkingPlace.previousPrice}
+                    value={pantryPlace.previousPrice}
                     className="block line-through"
                   />
                 )}
                 <NumberFormatter
                   suffix="₽"
                   thousandSeparator=" "
-                  value={parkingPlace.currentPrice}
+                  value={pantryPlace.currentPrice}
                 />
               </Table.Td>
               <Table.Td>
-                <Pill color={PlaceStatusRecord[parkingPlace.status].color}>
-                  {PlaceStatusRecord[parkingPlace.status].title}
+                <Pill color={PlaceStatusRecord[pantryPlace.status].color}>
+                  {PlaceStatusRecord[pantryPlace.status].title}
                 </Pill>
               </Table.Td>
               <Table.Td>
                 <Button
                   classNames={{ root: 'bg-black' }}
-                  onClick={() => handleUpdateButtonClick(parkingPlace)}
+                  onClick={() => handleUpdateButtonClick(pantryPlace)}
                 >
                   Обновить
                 </Button>
@@ -190,14 +170,14 @@ export default function ParkingPlacesPage() {
 
       <Modal
         opened={isModalOpened}
-        title={`Парковочное место №${selectedParkingPlace?.id}`}
+        title={`Парковочное место №${selectedPantryPlace?.id}`}
         centered
         classNames={{ title: 'text-xl' }}
         onClose={closeModal}
       >
-        {selectedParkingPlace !== null && (
-          <ParkingPlaceUpdateForm
-            parkingPlace={selectedParkingPlace}
+        {selectedPantryPlace !== null && (
+          <PantryPlaceUpdateForm
+            pantryPlace={selectedPantryPlace}
             onSubmit={closeModal}
             onCancel={closeModal}
           />
