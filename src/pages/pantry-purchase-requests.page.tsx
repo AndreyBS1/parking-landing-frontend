@@ -117,9 +117,9 @@ export default function PantryPurchaseRequestsPage() {
 
       <Modal
         opened={isModalOpened}
-        title={`Запрос на покупку места №${selectedPurchaseRequest?.pantryPlace.id}`}
+        title={`Запрос на покупку кладовой №${selectedPurchaseRequest?.pantryPlace.id}`}
         centered
-        size="lg"
+        size="xl"
         classNames={{ title: 'text-xl' }}
         onClose={closeModal}
       >
@@ -190,6 +190,20 @@ export default function PantryPurchaseRequestsPage() {
               }
             >
               Сбросить
+            </Button>
+          )}
+          {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.InProcess && (
+            <Button
+              loading={isUpdateStatusPending}
+              classNames={{ root: 'bg-black' }}
+              onClick={() =>
+                updatePurchaseRequestStatusMutation({
+                  id: selectedPurchaseRequest?.id || 0,
+                  status: PurchaseRequestStatusesEnum.InProcess,
+                })
+              }
+            >
+              Забронировать
             </Button>
           )}
           {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Rejected && (

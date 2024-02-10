@@ -65,7 +65,7 @@ export default function PlaceBookingForm(props: IPlaceBookingFormProps) {
           parkingPlaceId: placeId,
           customerName: data.name,
           customerEmail: data.email,
-          customerPhoneNumber: data.phoneNumber,
+          customerPhoneNumber: `+7${data.phoneNumber}`,
         })
         queryClient.invalidateQueries({ queryKey: ['parking-places'] })
       }

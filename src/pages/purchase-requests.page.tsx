@@ -124,7 +124,7 @@ export default function PurchaseRequestsPage() {
         opened={isModalOpened}
         title={`Запрос на покупку места №${selectedPurchaseRequest?.parkingPlace.id}`}
         centered
-        size="lg"
+        size="xl"
         classNames={{ title: 'text-xl' }}
         onClose={closeModal}
       >
@@ -196,6 +196,20 @@ export default function PurchaseRequestsPage() {
               }
             >
               Сбросить
+            </Button>
+          )}
+          {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.InProcess && (
+            <Button
+              loading={isUpdateStatusPending}
+              classNames={{ root: 'bg-black' }}
+              onClick={() =>
+                updatePurchaseRequestStatusMutation({
+                  id: selectedPurchaseRequest?.id || 0,
+                  status: PurchaseRequestStatusesEnum.InProcess,
+                })
+              }
+            >
+              Забронировать
             </Button>
           )}
           {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Rejected && (
