@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mantine/hooks'
 import { Mousewheel } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Footer from '../components/footer.component'
@@ -9,41 +10,48 @@ import PhotoGallery from '../components/photo-gallery.component'
 import ScrollControls from '../components/scroll-controls.component'
 
 export default function MainPage() {
+  const isDesktop = useMediaQuery('min-width: 1024px')
+
   return (
     <>
-      <Swiper
-        modules={[Mousewheel]}
-        direction="vertical"
-        mousewheel={true}
-        speed={1000}
-        className="hidden lg:block"
-        style={{ width: '100vw', height: '100vh' }}
-      >
-        <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
+      {isDesktop ? (
+        <Swiper
+          modules={[Mousewheel]}
+          direction="vertical"
+          mousewheel={true}
+          speed={1000}
+          style={{ width: '100vw', height: '100vh' }}
+        >
+          <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
+            <Header />
+            <Hero />
+          </SwiperSlide>
+          <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
+            <ParkingPlan />
+          </SwiperSlide>
+          <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
+            <GeoPosition />
+          </SwiperSlide>
+          <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
+            <div className="h-full flex flex-col">
+              <PhotoGallery />
+              <Footer />
+            </div>
+          </SwiperSlide>
+          <ScrollControls />
+        </Swiper>
+      ) : null}
+
+      {!isDesktop ? (
+        <>
           <Header />
           <Hero />
-        </SwiperSlide>
-        <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
           <ParkingPlan />
-        </SwiperSlide>
-        <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
           <GeoPosition />
-        </SwiperSlide>
-        <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
           <PhotoGallery />
           <Footer />
-        </SwiperSlide>
-        <ScrollControls />
-      </Swiper>
-
-      <div className="lg:hidden">
-        <Header />
-        <Hero />
-        <ParkingPlan />
-        <GeoPosition />
-        <PhotoGallery />
-        <Footer />
-      </div>
+        </>
+      ) : null}
     </>
   )
 }

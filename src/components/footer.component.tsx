@@ -17,7 +17,7 @@ export default function Footer() {
     <>
       <footer
         id="contacts"
-        className="bg-additional text-white pt-14 pb-20 px-10 lg:pl-32 lg:pr-28 lg:flex justify-between items-end"
+        className="shrink-0 grow bg-additional text-white pt-14 pb-20 px-10 lg:pl-32 lg:pr-28 lg:flex justify-between items-end"
       >
         <div className="mb-14 lg:mb-0">
           <h2 className="text-5xl font-bold">Контакты</h2>

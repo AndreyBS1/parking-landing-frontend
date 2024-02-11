@@ -7,7 +7,7 @@ export default function GeoPosition() {
       <img
         src="/images/geo-position.jpg"
         alt="Местоположение паркинга"
-        className="w-full h-full object-cover object-center"
+        className="w-screen h-screen object-cover object-center"
       />
       <div className="absolute bottom-24 inset-x-0 flex justify-center">
         <a href="https://yandex.ru/maps/-/CDBMZBmZ" target="_blank" rel="noreferrer">
