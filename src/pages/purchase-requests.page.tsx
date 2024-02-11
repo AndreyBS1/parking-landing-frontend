@@ -122,7 +122,7 @@ export default function PurchaseRequestsPage() {
 
       <Modal
         opened={isModalOpened}
-        title={`Запрос на покупку места №${selectedPurchaseRequest?.parkingPlace.id}`}
+        title={`Запрос на покупку места №${selectedPurchaseRequest?.parkingPlace.displayedNo}`}
         centered
         size="xl"
         classNames={{ title: 'text-xl' }}
@@ -237,7 +237,7 @@ export default function PurchaseRequestsPage() {
                 })
               }
             >
-              Одобрить
+              Продано
             </Button>
           )}
         </Group>

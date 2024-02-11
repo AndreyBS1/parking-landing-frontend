@@ -1,9 +1,16 @@
+import { useSwiper } from 'swiper/react'
 import Button from '../shared-ui/button.component'
 import Section from './section.component'
 
 export default function Hero() {
+  const swiper = useSwiper()
+
   const handleButtonClick = () => {
-    const parkingPlanElement = document.querySelector('#parking-plan')
+    if (window.innerWidth >= 1024) {
+      swiper.slideNext()
+      return
+    }
+    const parkingPlanElement = document.querySelector('#mobile-parking-plan')
     if (parkingPlanElement) {
       parkingPlanElement.scrollIntoView({ behavior: 'smooth' })
     }

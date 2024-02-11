@@ -123,95 +123,100 @@ export default function ParkingPlan() {
     <>
       <Section
         id="parking-plan"
-        className="hidden py-[5.15rem] px-[8.05rem] lg:flex items-end lg:gap-x-[7.25rem]"
+        className="hidden px-[8.05rem] lg:flex justify-center items-center"
       >
-        <div className="order-2 lg:order-1 grow relative">
-          <img src={parkingPlanImage} alt="" />
-          {floorParkingPlaces.map((parkingPlace) => (
-            <ParkingPlace
-              key={parkingPlace.id}
-              parkingPlace={parkingPlace}
-              className="absolute"
-              onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
-            />
-          ))}
-          {floorPantryPlaces.map((pantryPlace) => (
-            <PantryPlace
-              key={pantryPlace.id}
-              pantryPlace={pantryPlace}
-              className="absolute"
-              onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
-            />
-          ))}
-        </div>
-        <div className="order-1 lg:order-2 w-fit">
-          <div className="mb-[1.05rem] flex gap-x-[1.4rem]">
-            {FloorRecordEntries.map(([floor]) => (
-              <div key={floor} className="flex flex-col items-center gap-y-[0.7rem]">
-                <Button
-                  className={clsx(
-                    'h-[3.55rem] w-[3.55rem] rounded-full flex justify-center items-center text-[2rem]',
-                    Number(floor) === selectedFloor &&
-                      'bg-steel border-steel hover:text-steel hover:border-steel'
-                  )}
-                  onClick={() => setSelectedFloor(Number(floor))}
-                >
-                  {Number(floor) + 1}
-                </Button>
-                <p className="uppercase">ЭТАЖ</p>
-              </div>
+        <div className="flex justify-center items-end gap-x-[7.25rem]">
+          <div className="relative">
+            <img src={parkingPlanImage} alt="" className="w-[53.3rem]" />
+            {floorParkingPlaces.map((parkingPlace) => (
+              <ParkingPlace
+                key={parkingPlace.id}
+                parkingPlace={parkingPlace}
+                className="absolute"
+                onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
+              />
+            ))}
+            {floorPantryPlaces.map((pantryPlace) => (
+              <PantryPlace
+                key={pantryPlace.id}
+                pantryPlace={pantryPlace}
+                className="absolute"
+                onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
+              />
             ))}
           </div>
-          <p className="text-3xl mb-6">{selectedFloorInfo.title}</p>
-          <div className="mb-3 flex justify-between items-center">
-            <p>ТИП:</p>
-            <p>{selectedFloorInfo.type}</p>
-          </div>
-          <div className="mb-3 flex justify-between items-center">
-            <p>СРОК ПЕРЕДАЧИ:</p>
-            <p>{selectedFloorInfo.deadline}</p>
-          </div>
-          <div className="mb-3 flex justify-between items-center">
-            <p>МЕСТ В ПРОДАЖЕ:</p>
-            <p>{selectedFloorInfo.placesAmount}</p>
-          </div>
-          <div className="h-[2px] my-5 bg-black" />
-          <p className="mb-6 text-3xl">Статус</p>
-          {ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
-            <div
-              key={placeStatusMarking.title}
-              className="mb-4 flex items-center gap-x-5"
-            >
-              <div
-                className="h-[1.80rem] w-[1.80rem] rounded-full flex items-center justify-center"
-                style={{ backgroundColor: placeStatusMarking.color }}
-              >
-                {placeStatusMarking.iconText ? (
-                  <p className="text-xs text-white">{placeStatusMarking.iconText}</p>
-                ) : (
-                  <img
-                    src={placeStatusMarking.icon}
-                    alt={placeStatusMarking.title}
-                    className="w-[1.075rem]"
-                  />
-                )}
-              </div>
-              <p>{placeStatusMarking.title}</p>
+          <div className="w-fit">
+            <div className="mb-[1.05rem] flex gap-x-[1.4rem]">
+              {FloorRecordEntries.map(([floor]) => (
+                <div key={floor} className="flex flex-col items-center gap-y-[0.7rem]">
+                  <Button
+                    className={clsx(
+                      'h-[3.55rem] w-[3.55rem] rounded-full flex justify-center items-center text-[2rem]',
+                      Number(floor) === selectedFloor &&
+                        'bg-steel border-steel hover:text-steel hover:border-steel'
+                    )}
+                    onClick={() => setSelectedFloor(Number(floor))}
+                  >
+                    {Number(floor) + 1}
+                  </Button>
+                  <p className="uppercase">ЭТАЖ</p>
+                </div>
+              ))}
             </div>
-          ))}
-          <div className="h-[2px] mt-10 mb-4 bg-black" />
-          <Link
-            href="tel:+79117751111"
-            target="_blank"
-            rel="noreferrer"
-            className="text-3xl"
-          >
-            +7 (911) 775-11-11
-          </Link>
+            <p className="text-3xl mb-6">{selectedFloorInfo.title}</p>
+            <div className="mb-3 flex justify-between items-center">
+              <p>ТИП:</p>
+              <p>{selectedFloorInfo.type}</p>
+            </div>
+            <div className="mb-3 flex justify-between items-center">
+              <p>СРОК ПЕРЕДАЧИ:</p>
+              <p>{selectedFloorInfo.deadline}</p>
+            </div>
+            <div className="mb-3 flex justify-between items-center">
+              <p>МЕСТ В ПРОДАЖЕ:</p>
+              <p>{selectedFloorInfo.placesAmount}</p>
+            </div>
+            <div className="h-[2px] my-5 bg-black" />
+            <p className="mb-6 text-3xl">Статус</p>
+            {ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
+              <div
+                key={placeStatusMarking.title}
+                className="mb-4 flex items-center gap-x-5"
+              >
+                <div
+                  className="h-[1.80rem] w-[1.80rem] rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: placeStatusMarking.color }}
+                >
+                  {placeStatusMarking.iconText ? (
+                    <p className="text-xs text-white">{placeStatusMarking.iconText}</p>
+                  ) : (
+                    <img
+                      src={placeStatusMarking.icon}
+                      alt={placeStatusMarking.title}
+                      className="w-[1.075rem]"
+                    />
+                  )}
+                </div>
+                <p>{placeStatusMarking.title}</p>
+              </div>
+            ))}
+            <div className="h-[2px] mt-10 mb-4 bg-black" />
+            <div className="flex justify-between items-center gap-x-5">
+              <Link
+                href="tel:+79117751111"
+                target="_blank"
+                rel="noreferrer"
+                className="text-3xl"
+              >
+                +7 (911) 775-11-11
+              </Link>
+              {/* <DownloadPdfButton /> */}
+            </div>
+          </div>
         </div>
       </Section>
 
-      <Section id="parking-plan" className="lg:hidden py-14 px-5">
+      <Section id="mobile-parking-plan" className="lg:hidden py-14 px-5">
         <div className="mb-28">
           <div className="mb-[1.05rem] flex gap-x-[1.4rem]">
             {FloorRecordEntries.map(([floor]) => (

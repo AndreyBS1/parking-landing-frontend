@@ -117,7 +117,7 @@ export default function PantryPurchaseRequestsPage() {
 
       <Modal
         opened={isModalOpened}
-        title={`Запрос на покупку кладовой №${selectedPurchaseRequest?.pantryPlace.id}`}
+        title={`Запрос на покупку кладовой №${selectedPurchaseRequest?.pantryPlace.displayedNo}`}
         centered
         size="xl"
         classNames={{ title: 'text-xl' }}
@@ -231,7 +231,7 @@ export default function PantryPurchaseRequestsPage() {
                 })
               }
             >
-              Одобрить
+              Продано
             </Button>
           )}
         </Group>
