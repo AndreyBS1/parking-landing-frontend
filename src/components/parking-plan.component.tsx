@@ -26,7 +26,7 @@ enum ModalTypes {
 }
 
 export default function ParkingPlan() {
-  const isDesktop = useMediaQuery('min-width: 1024px')
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
 
   const {
     data: parkingPlaces,

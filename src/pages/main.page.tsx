@@ -10,7 +10,7 @@ import PhotoGallery from '../components/photo-gallery.component'
 import ScrollControls from '../components/scroll-controls.component'
 
 export default function MainPage() {
-  const isDesktop = useMediaQuery('min-width: 1024px')
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
 
   return (
     <>
