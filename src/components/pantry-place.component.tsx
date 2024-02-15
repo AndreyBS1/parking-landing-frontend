@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { PantryPlaceImageSizeRecord } from '../constants/pantry-place-image-size-record.constant'
 import { PantryPlaceImagesRecord } from '../constants/pantry-place-images-record.constant'
 import { PantryPlacePositionsRecord } from '../constants/pantry-place-positions-record'
+import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 import Button from '../shared-ui/button.component'
 import { IPantryPlace } from '../types/pantry-place.type'
 
@@ -27,11 +28,17 @@ export default function PantryPlace(props: IPantryPlaceProps) {
       withArrow
       arrowSize={20}
       arrowPosition="center"
+      disabled={pantryPlace.status !== PlaceStatusesEnum.Free}
       classNames={{ dropdown: 'py-5 px-8' }}
     >
       <HoverCard.Target>
         <div
-          className={clsx('cursor-pointer', className)}
+          className={clsx(
+            pantryPlace.status !== PlaceStatusesEnum.Free
+              ? 'cursor-not-allowed'
+              : 'cursor-pointer',
+            className
+          )}
           style={{
             width: `${zoom * imageSize.width}rem`,
             top: `${zoom * position.top}rem`,

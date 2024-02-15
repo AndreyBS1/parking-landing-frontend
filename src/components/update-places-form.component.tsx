@@ -9,13 +9,14 @@ import { updateParkingPlace } from '../api/update-parking-place'
 import { StringSchema } from '../utils/validation-schemas'
 
 const schema = z.object({
+  area: StringSchema,
   previousPrice: StringSchema,
   currentPrice: StringSchema,
 })
 
 type TFormData = z.infer<typeof schema>
 
-interface IUpdatePricesFormProps {
+interface IUpdatePlacesFormProps {
   placeType: string
   floor?: string
   defaultValues?: Partial<TFormData>
@@ -23,7 +24,7 @@ interface IUpdatePricesFormProps {
   onError: () => void
 }
 
-export default function UpdatePricesForm(props: IUpdatePricesFormProps) {
+export default function UpdatePlacesForm(props: IUpdatePlacesFormProps) {
   const { placeType, floor, defaultValues, onSubmit, onError } = props
 
   const { control, handleSubmit } = useForm<TFormData>({
@@ -62,6 +63,7 @@ export default function UpdatePricesForm(props: IUpdatePricesFormProps) {
       const promises = placesToUpdate.map((place) =>
         updateParkingPlaceMutation({
           ...place,
+          area: Number(data.area),
           previousPrice: Number(data.previousPrice),
           currentPrice: Number(data.currentPrice),
         })
@@ -78,6 +80,19 @@ export default function UpdatePricesForm(props: IUpdatePricesFormProps) {
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <Stack w="30rem" gap="md" mb="xl">
+        <Controller
+          control={control}
+          name="area"
+          render={({ field, fieldState: { error } }) => (
+            <NumberInput
+              {...field}
+              label="Площадь"
+              error={error?.message}
+              rightSection={<p>м2</p>}
+              onChange={(value) => field.onChange(String(value))}
+            />
+          )}
+        />
         <Controller
           control={control}
           name="previousPrice"

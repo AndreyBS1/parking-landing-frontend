@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { ParkingPlaceImagesRecord } from '../constants/parking-place-images-record.component'
 import { ParkingPlacePositionsRecord } from '../constants/parking-place-positions-record'
 import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record.constant'
+import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 import Button from '../shared-ui/button.component'
 import { IParkingPlace } from '../types/parking-place.type'
 
@@ -27,12 +28,18 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
       withArrow
       arrowSize={20}
       arrowPosition="center"
-      transitionProps={{ duration: 0 }}
+      closeDelay={0}
+      disabled={parkingPlace.status !== PlaceStatusesEnum.Free}
       classNames={{ dropdown: 'py-5 px-8' }}
     >
       <HoverCard.Target>
         <div
-          className={clsx('cursor-pointer', className)}
+          className={clsx(
+            parkingPlace.status !== PlaceStatusesEnum.Free
+              ? 'cursor-not-allowed'
+              : 'cursor-pointer',
+            className
+          )}
           style={{
             width: `${zoom * 1.75}rem`,
             top: `${zoom * position.top}rem`,

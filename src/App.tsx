@@ -6,7 +6,7 @@ import MainPage from './pages/main.page'
 import PantryPlacesPage from './pages/pantry-places.page'
 import PantryPurchaseRequestsPage from './pages/pantry-purchase-requests.page'
 import ParkingPlacesPage from './pages/parking-places.page'
-import PricesPage from './pages/prices.page'
+import PlaceParametersPage from './pages/place-parameters.page'
 import PurchaseRequestsPage from './pages/purchase-requests.page'
 import { useAuthStore } from './stores/use-auth-store.hook'
 
@@ -45,8 +45,8 @@ const router = createBrowserRouter([
         element: <DashboardPage />,
         children: [
           {
-            path: 'prices',
-            element: <PricesPage />,
+            path: 'place-parameters',
+            element: <PlaceParametersPage />,
           },
           {
             path: 'parking-places',

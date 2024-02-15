@@ -2,7 +2,7 @@ import { Group, Loader, Select } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getParkingPlaces } from '../api/get-parking-places'
-import UpdatePricesForm from '../components/update-prices-form.component'
+import UpdatePlacesForm from '../components/update-places-form.component'
 import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
 
 const floorFilterData = [
@@ -24,7 +24,7 @@ type TFilterOptions = {
   type: string | null
 }
 
-export default function PricesPage() {
+export default function PlaceParametersPage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['parking-places'],
     queryFn: getParkingPlaces,
@@ -65,7 +65,7 @@ export default function PricesPage() {
         isParkingPlaceValid = false
       }
       return isParkingPlaceValid
-    }) || null
+    }) ?? null
 
   const placeTypeLabel =
     placeTypeFilterData.find(({ value }) => value === filterOptions.type)?.label || ''
@@ -101,7 +101,7 @@ export default function PricesPage() {
       {filterOptions.type === null && (
         <div className="h-96 flex justify-center items-center">
           <p className="text-2xl font-semibold opacity-30">
-            Чтобы обновить цены, выберите тип парковочного места
+            Чтобы обновить параметры, выберите тип парковочного места
           </p>
         </div>
       )}
@@ -115,15 +115,16 @@ export default function PricesPage() {
       {filterOptions.type !== null && placeExample !== null && (
         <>
           <p className="mb-6 text-lg">
-            Цены для места "{placeTypeLabel}" для{' '}
+            Параметры места "{placeTypeLabel}" для{' '}
             {filterOptions.floor === null
               ? 'всех этажей'
-              : `${filterOptions.floor} этажа`}
+              : `${Number(filterOptions.floor) + 1} этажа`}
           </p>
-          <UpdatePricesForm
+          <UpdatePlacesForm
             placeType={filterOptions.type}
             floor={filterOptions.floor ?? undefined}
             defaultValues={{
+              area: String(placeExample.area),
               previousPrice: String(placeExample.previousPrice),
               currentPrice: String(placeExample.currentPrice),
             }}

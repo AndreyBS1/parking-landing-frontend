@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Group, NumberInput, Select, Stack, TextInput } from '@mantine/core'
+import { Button, Group, NumberInput, Select, Stack } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -19,6 +19,7 @@ const schema = z.object({
   previousPrice: StringSchema,
   currentPrice: StringSchema,
   placeType: StringSchema,
+  area: StringSchema,
 })
 
 type TFormData = z.infer<typeof schema>
@@ -38,6 +39,7 @@ export default function ParkingPlaceUpdateForm(props: IParkingPlaceUpdateFormPro
       previousPrice: String(parkingPlace.previousPrice),
       currentPrice: String(parkingPlace.currentPrice),
       placeType: String(parkingPlace.type),
+      area: String(parkingPlace.area),
     },
   })
   const { mutateAsync: updateParkingPlaceMutation } = useMutation({
@@ -49,6 +51,7 @@ export default function ParkingPlaceUpdateForm(props: IParkingPlaceUpdateFormPro
       await updateParkingPlaceMutation({
         ...parkingPlace,
         type: Number(data.placeType),
+        area: Number(data.area),
         previousPrice: Number(data.previousPrice),
         currentPrice: Number(data.currentPrice),
       })
@@ -62,11 +65,18 @@ export default function ParkingPlaceUpdateForm(props: IParkingPlaceUpdateFormPro
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <Stack gap="md" mb="xl">
-        <TextInput
-          label="Площадь"
-          value={parkingPlace.area}
-          readOnly
-          rightSection={<p>м2</p>}
+        <Controller
+          control={control}
+          name="area"
+          render={({ field, fieldState: { error } }) => (
+            <NumberInput
+              {...field}
+              label="Площадь"
+              error={error?.message}
+              rightSection={<p>м2</p>}
+              onChange={(value) => field.onChange(String(value))}
+            />
+          )}
         />
         <Controller
           control={control}

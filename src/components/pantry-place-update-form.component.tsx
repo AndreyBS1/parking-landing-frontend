@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Group, NumberInput, Stack, TextInput } from '@mantine/core'
+import { Button, Group, NumberInput, Stack } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -11,6 +11,7 @@ import { StringSchema } from '../utils/validation-schemas'
 const schema = z.object({
   previousPrice: StringSchema,
   currentPrice: StringSchema,
+  area: StringSchema,
 })
 
 type TFormData = z.infer<typeof schema>
@@ -29,6 +30,7 @@ export default function PantryPlaceUpdateForm(props: IPantryPlaceUpdateFormProps
     defaultValues: {
       previousPrice: String(pantryPlace.previousPrice),
       currentPrice: String(pantryPlace.currentPrice),
+      area: String(pantryPlace.area),
     },
   })
   const { mutateAsync: updatePantryPlaceMutation } = useMutation({
@@ -39,6 +41,7 @@ export default function PantryPlaceUpdateForm(props: IPantryPlaceUpdateFormProps
     try {
       await updatePantryPlaceMutation({
         ...pantryPlace,
+        area: Number(data.area),
         previousPrice: Number(data.previousPrice),
         currentPrice: Number(data.currentPrice),
       })
@@ -52,11 +55,18 @@ export default function PantryPlaceUpdateForm(props: IPantryPlaceUpdateFormProps
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <Stack gap="md" mb="xl">
-        <TextInput
-          label="Площадь"
-          value={pantryPlace.area}
-          readOnly
-          rightSection={<p>м2</p>}
+        <Controller
+          control={control}
+          name="area"
+          render={({ field, fieldState: { error } }) => (
+            <NumberInput
+              {...field}
+              label="Площадь"
+              error={error?.message}
+              rightSection={<p>м2</p>}
+              onChange={(value) => field.onChange(String(value))}
+            />
+          )}
         />
         <Controller
           control={control}

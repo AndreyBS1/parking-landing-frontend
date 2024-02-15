@@ -7,7 +7,7 @@ export const ScrollLinks = [
 ]
 
 export const AdminLinks = [
-  { title: 'Цены', href: '/admin/dashboard/prices' },
+  { title: 'Параметры мест', href: '/admin/dashboard/place-parameters' },
   { title: 'Парковочные места', href: '/admin/dashboard/parking-places' },
   { title: 'Кладовые места', href: '/admin/dashboard/pantry-places' },
   { title: 'Заявки на покупку', href: '/admin/dashboard/purchase-requests' },
