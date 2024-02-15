@@ -28,6 +28,7 @@ export default function PantryPlace(props: IPantryPlaceProps) {
       withArrow
       arrowSize={20}
       arrowPosition="center"
+      closeDelay={0}
       disabled={pantryPlace.status !== PlaceStatusesEnum.Free}
       classNames={{ dropdown: 'py-5 px-8' }}
     >
