@@ -9,9 +9,9 @@ import {
   Table,
   TextInput,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { deletePantryPurchaseRequest } from '../api/delete-pantry-purchase-request'
 import { getPantryPurchaseRequests } from '../api/get-pantry-purchase-requests'
 import { queryClient } from '../api/query-client'
 import { updatePantryPurchaseRequestStatus } from '../api/update-pantry-purchase-request-status'
@@ -19,10 +19,16 @@ import { PurchaseRequestStatusRecord } from '../constants/purchase-request-statu
 import { PurchaseRequestStatusesEnum } from '../enums/purchase-request-statuses.enum'
 import { IPantryPurchaseRequest } from '../types/pantry-purchase-request.type'
 
+enum ModalTypes {
+  Update,
+  Delete,
+}
+
 const statusFilterData = [
-  { label: 'В ожидании', value: String(PurchaseRequestStatusesEnum.Idle) },
+  // { label: 'В ожидании', value: String(PurchaseRequestStatusesEnum.Idle) },
   { label: 'В обработке', value: String(PurchaseRequestStatusesEnum.InProcess) },
   { label: 'Продано', value: String(PurchaseRequestStatusesEnum.Approved) },
+  { label: 'Отклонена', value: String(PurchaseRequestStatusesEnum.Rejected) },
 ]
 
 type TFilterOptions = {
@@ -35,22 +41,31 @@ export default function PantryPurchaseRequestsPage() {
     queryFn: getPantryPurchaseRequests,
   })
 
-  const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure()
-
-  const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
-    status: null,
-  })
-
   const {
     mutate: updatePurchaseRequestStatusMutation,
     isPending: isUpdateStatusPending,
   } = useMutation({
     mutationFn: updatePantryPurchaseRequestStatus,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['purchase-requests'] })
-      closeModal()
+      queryClient.invalidateQueries({ queryKey: ['pantry-purchase-requests'] })
+      setOpenedModalType(null)
     },
   })
+
+  const { mutate: deletePurchaseRequestMutation, isPending: isDeletePending } =
+    useMutation({
+      mutationFn: deletePantryPurchaseRequest,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['pantry-purchase-requests'] })
+        setOpenedModalType(null)
+      },
+    })
+
+  const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
+    status: null,
+  })
+
+  const [openedModalType, setOpenedModalType] = useState<ModalTypes | null>(null)
 
   const [selectedPurchaseRequest, setSelectedPurchaseRequest] =
     useState<IPantryPurchaseRequest | null>(null)
@@ -101,7 +116,19 @@ export default function PantryPurchaseRequestsPage() {
 
   const handleShowMoreButtonClick = (purchaseRequest: IPantryPurchaseRequest) => {
     setSelectedPurchaseRequest(purchaseRequest)
-    openModal()
+    setOpenedModalType(ModalTypes.Update)
+  }
+
+  const handleDeleteButtonClick = (purchaseRequest: IPantryPurchaseRequest) => {
+    setSelectedPurchaseRequest(purchaseRequest)
+    setOpenedModalType(ModalTypes.Delete)
+  }
+
+  const handlePurchaseRequestDelete = () => {
+    if (!selectedPurchaseRequest) {
+      return
+    }
+    deletePurchaseRequestMutation(selectedPurchaseRequest.id)
   }
 
   return (
@@ -147,13 +174,25 @@ export default function PantryPurchaseRequestsPage() {
                   {PurchaseRequestStatusRecord[purchaseRequest.status].title}
                 </Pill>
               </Table.Td>
-              <Table.Td>
-                <Button
-                  classNames={{ root: 'bg-black' }}
-                  onClick={() => handleShowMoreButtonClick(purchaseRequest)}
-                >
-                  Подробнее
-                </Button>
+              <Table.Td w="20rem">
+                <Group>
+                  <Button
+                    classNames={{ root: 'bg-black' }}
+                    onClick={() => handleShowMoreButtonClick(purchaseRequest)}
+                  >
+                    Подробнее
+                  </Button>
+                  <Button
+                    classNames={{ root: 'bg-red' }}
+                    onClick={() => handleDeleteButtonClick(purchaseRequest)}
+                  >
+                    <img
+                      src="/icons/cross-white-icon.svg"
+                      alt="Delete request"
+                      className="w-6 h-6"
+                    />
+                  </Button>
+                </Group>
               </Table.Td>
             </Table.Tr>
           ))}
@@ -161,12 +200,12 @@ export default function PantryPurchaseRequestsPage() {
       </Table>
 
       <Modal
-        opened={isModalOpened}
+        opened={openedModalType === ModalTypes.Update}
         title={`Запрос на покупку кладовой №${selectedPurchaseRequest?.pantryPlace.displayedNo}`}
         centered
         size="xl"
         classNames={{ title: 'text-xl' }}
-        onClose={closeModal}
+        onClose={() => setOpenedModalType(null)}
       >
         <Group grow mb="xl" align="top">
           <Stack gap="md">
@@ -219,11 +258,11 @@ export default function PantryPurchaseRequestsPage() {
             variant="outline"
             loading={isUpdateStatusPending}
             classNames={{ root: 'border-black', label: 'text-black' }}
-            onClick={closeModal}
+            onClick={() => setOpenedModalType(null)}
           >
             Закрыть
           </Button>
-          {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Idle && (
+          {/* {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Idle && (
             <Button
               loading={isUpdateStatusPending}
               classNames={{ root: 'bg-black' }}
@@ -236,7 +275,7 @@ export default function PantryPurchaseRequestsPage() {
             >
               Сбросить
             </Button>
-          )}
+          )} */}
           {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.InProcess && (
             <Button
               loading={isUpdateStatusPending}
@@ -279,6 +318,35 @@ export default function PantryPurchaseRequestsPage() {
               Продано
             </Button>
           )}
+        </Group>
+      </Modal>
+
+      <Modal
+        opened={openedModalType === ModalTypes.Delete}
+        centered
+        onClose={() => setOpenedModalType(null)}
+      >
+        <h2 className="text-center text-xl mb-3">Удалить запрос?</h2>
+        <p className="text-center mb-10 leading-tight">
+          После удаления запроса нельзя будет изменить статус места через административную
+          панель
+        </p>
+        <Group grow>
+          <Button
+            loading={isDeletePending}
+            classNames={{ root: 'bg-black' }}
+            onClick={handlePurchaseRequestDelete}
+          >
+            Удалить
+          </Button>
+          <Button
+            variant="outline"
+            loading={isDeletePending}
+            classNames={{ root: 'border-black', label: 'text-black' }}
+            onClick={() => setOpenedModalType(null)}
+          >
+            Закрыть
+          </Button>
         </Group>
       </Modal>
     </>

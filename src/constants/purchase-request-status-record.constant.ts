@@ -9,8 +9,10 @@ export const PurchaseRequestStatusRecord: Record<
   PurchaseRequestStatusesEnum,
   IPurchaseRequestStatus
 > = {
-  [PurchaseRequestStatusesEnum.Idle]: { color: 'gray', title: 'В ожидании' },
-  [PurchaseRequestStatusesEnum.InProcess]: { color: 'black', title: 'В обработке' },
+  // [PurchaseRequestStatusesEnum.Idle]: { color: 'gray', title: 'В ожидании' },
+  // [PurchaseRequestStatusesEnum.InProcess]: { color: 'black', title: 'В обработке' },
+  [PurchaseRequestStatusesEnum.Idle]: { color: 'gray', title: '' },
+  [PurchaseRequestStatusesEnum.InProcess]: { color: 'black', title: 'В ожидании' },
   [PurchaseRequestStatusesEnum.Approved]: { color: 'green', title: 'Продано' },
   [PurchaseRequestStatusesEnum.Rejected]: { color: 'red', title: 'Отклонена' },
 }

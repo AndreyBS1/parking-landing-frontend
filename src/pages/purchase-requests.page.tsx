@@ -9,9 +9,9 @@ import {
   Table,
   TextInput,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { deletePurchaseRequest } from '../api/delete-purchase-request'
 import { getPurchaseRequests } from '../api/get-purchase-requests'
 import { queryClient } from '../api/query-client'
 import { updatePurchaseRequestStatus } from '../api/update-purchase-request-status'
@@ -20,10 +20,16 @@ import { PurchaseRequestStatusRecord } from '../constants/purchase-request-statu
 import { PurchaseRequestStatusesEnum } from '../enums/purchase-request-statuses.enum'
 import { IPurchaseRequest } from '../types/purchase-request.type'
 
+enum ModalTypes {
+  Update,
+  Delete,
+}
+
 const statusFilterData = [
-  { label: 'В ожидании', value: String(PurchaseRequestStatusesEnum.Idle) },
+  // { label: 'В ожидании', value: String(PurchaseRequestStatusesEnum.Idle) },
   { label: 'В обработке', value: String(PurchaseRequestStatusesEnum.InProcess) },
   { label: 'Продано', value: String(PurchaseRequestStatusesEnum.Approved) },
+  { label: 'Отклонена', value: String(PurchaseRequestStatusesEnum.Rejected) },
 ]
 
 type TFilterOptions = {
@@ -36,12 +42,6 @@ export default function PurchaseRequestsPage() {
     queryFn: getPurchaseRequests,
   })
 
-  const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure()
-
-  const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
-    status: null,
-  })
-
   const {
     mutate: updatePurchaseRequestStatusMutation,
     isPending: isUpdateStatusPending,
@@ -49,9 +49,24 @@ export default function PurchaseRequestsPage() {
     mutationFn: updatePurchaseRequestStatus,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['purchase-requests'] })
-      closeModal()
+      setOpenedModalType(null)
     },
   })
+
+  const { mutate: deletePurchaseRequestMutation, isPending: isDeletePending } =
+    useMutation({
+      mutationFn: deletePurchaseRequest,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['purchase-requests'] })
+        setOpenedModalType(null)
+      },
+    })
+
+  const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
+    status: null,
+  })
+
+  const [openedModalType, setOpenedModalType] = useState<ModalTypes | null>(null)
 
   const [selectedPurchaseRequest, setSelectedPurchaseRequest] =
     useState<IPurchaseRequest | null>(null)
@@ -106,7 +121,19 @@ export default function PurchaseRequestsPage() {
 
   const handleShowMoreButtonClick = (purchaseRequest: IPurchaseRequest) => {
     setSelectedPurchaseRequest(purchaseRequest)
-    openModal()
+    setOpenedModalType(ModalTypes.Update)
+  }
+
+  const handleDeleteButtonClick = (purchaseRequest: IPurchaseRequest) => {
+    setSelectedPurchaseRequest(purchaseRequest)
+    setOpenedModalType(ModalTypes.Delete)
+  }
+
+  const handlePurchaseRequestDelete = () => {
+    if (!selectedPurchaseRequest) {
+      return
+    }
+    deletePurchaseRequestMutation(selectedPurchaseRequest.id)
   }
 
   return (
@@ -152,13 +179,25 @@ export default function PurchaseRequestsPage() {
                   {PurchaseRequestStatusRecord[purchaseRequest.status].title}
                 </Pill>
               </Table.Td>
-              <Table.Td>
-                <Button
-                  classNames={{ root: 'bg-black' }}
-                  onClick={() => handleShowMoreButtonClick(purchaseRequest)}
-                >
-                  Подробнее
-                </Button>
+              <Table.Td w="20rem">
+                <Group>
+                  <Button
+                    classNames={{ root: 'bg-black' }}
+                    onClick={() => handleShowMoreButtonClick(purchaseRequest)}
+                  >
+                    Подробнее
+                  </Button>
+                  <Button
+                    classNames={{ root: 'bg-red' }}
+                    onClick={() => handleDeleteButtonClick(purchaseRequest)}
+                  >
+                    <img
+                      src="/icons/cross-white-icon.svg"
+                      alt="Delete request"
+                      className="w-6 h-6"
+                    />
+                  </Button>
+                </Group>
               </Table.Td>
             </Table.Tr>
           ))}
@@ -166,12 +205,12 @@ export default function PurchaseRequestsPage() {
       </Table>
 
       <Modal
-        opened={isModalOpened}
+        opened={openedModalType === ModalTypes.Update}
         title={`Запрос на покупку места №${selectedPurchaseRequest?.parkingPlace.displayedNo}`}
         centered
         size="xl"
         classNames={{ title: 'text-xl' }}
-        onClose={closeModal}
+        onClose={() => setOpenedModalType(null)}
       >
         <Group grow mb="xl">
           <Stack gap="md">
@@ -225,11 +264,11 @@ export default function PurchaseRequestsPage() {
             variant="outline"
             loading={isUpdateStatusPending}
             classNames={{ root: 'border-black', label: 'text-black' }}
-            onClick={closeModal}
+            onClick={() => setOpenedModalType(null)}
           >
             Закрыть
           </Button>
-          {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Idle && (
+          {/* {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.Idle && (
             <Button
               loading={isUpdateStatusPending}
               classNames={{ root: 'bg-black' }}
@@ -242,7 +281,7 @@ export default function PurchaseRequestsPage() {
             >
               Сбросить
             </Button>
-          )}
+          )} */}
           {selectedPurchaseRequest?.status !== PurchaseRequestStatusesEnum.InProcess && (
             <Button
               loading={isUpdateStatusPending}
@@ -285,6 +324,35 @@ export default function PurchaseRequestsPage() {
               Продано
             </Button>
           )}
+        </Group>
+      </Modal>
+
+      <Modal
+        opened={openedModalType === ModalTypes.Delete}
+        centered
+        onClose={() => setOpenedModalType(null)}
+      >
+        <h2 className="text-center text-xl mb-3">Удалить запрос?</h2>
+        <p className="text-center mb-10 leading-tight">
+          После удаления запроса нельзя будет изменить статус места через административную
+          панель
+        </p>
+        <Group grow>
+          <Button
+            loading={isDeletePending}
+            classNames={{ root: 'bg-black' }}
+            onClick={handlePurchaseRequestDelete}
+          >
+            Удалить
+          </Button>
+          <Button
+            variant="outline"
+            loading={isDeletePending}
+            classNames={{ root: 'border-black', label: 'text-black' }}
+            onClick={() => setOpenedModalType(null)}
+          >
+            Закрыть
+          </Button>
         </Group>
       </Modal>
     </>

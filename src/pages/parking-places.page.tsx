@@ -264,7 +264,7 @@ export default function ParkingPlacesPage() {
                   {PlaceStatusRecord[parkingPlace.status].title}
                 </Pill>
               </Table.Td>
-              <Table.Td>
+              <Table.Td w="20rem">
                 <Group>
                   <Button
                     classNames={{ root: 'bg-black' }}

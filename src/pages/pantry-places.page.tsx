@@ -7,17 +7,25 @@ import {
   NumberInput,
   Pill,
   Select,
+  Stack,
   Table,
+  TextInput,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { createPantryPurchaseRequest } from '../api/create-pantry-purchase-request'
 import { getPantryPlaces } from '../api/get-pantry-places'
+import { queryClient } from '../api/query-client'
 import PantryPlaceUpdateForm from '../components/pantry-place-update-form.component'
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
 import { PlacePriceTypesEnum } from '../enums/place-price-types.enum'
 import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 import { IPantryPlace } from '../types/pantry-place.type'
+
+enum ModalTypes {
+  UpdateForm,
+  BookForm,
+}
 
 const floorFilterData = [
   { label: '2', value: '1' },
@@ -50,7 +58,13 @@ export default function PantryPlacesPage() {
     queryKey: ['pantry-places'],
     queryFn: getPantryPlaces,
   })
-  const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure()
+
+  const {
+    mutateAsync: createPantryPurchaseRequestMutation,
+    isPending: isCreatePurchaseRequestPending,
+  } = useMutation({
+    mutationFn: createPantryPurchaseRequest,
+  })
 
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
     number: null,
@@ -58,9 +72,12 @@ export default function PantryPlacesPage() {
     priceType: null,
     status: null,
   })
+
   const [selectedPantryPlace, setSelectedPantryPlace] = useState<IPantryPlace | null>(
     null
   )
+
+  const [openedModalType, setOpenedModalType] = useState<ModalTypes | null>(null)
 
   if (isLoading) {
     return (
@@ -123,7 +140,30 @@ export default function PantryPlacesPage() {
 
   const handleUpdateButtonClick = (pantryPlace: IPantryPlace) => {
     setSelectedPantryPlace(pantryPlace)
-    openModal()
+    setOpenedModalType(ModalTypes.UpdateForm)
+  }
+
+  const handleBookButtonClick = (pantryPlace: IPantryPlace) => {
+    setSelectedPantryPlace(pantryPlace)
+    setOpenedModalType(ModalTypes.BookForm)
+  }
+
+  const handlePlaceBook = async () => {
+    if (!selectedPantryPlace) {
+      return
+    }
+    try {
+      await createPantryPurchaseRequestMutation({
+        pantryPlaceId: selectedPantryPlace.id,
+        customerName: 'Администратор',
+        customerEmail: 'parking-chistoenebo@bk.ru',
+        customerPhoneNumber: '+71111111111',
+      })
+      queryClient.invalidateQueries({ queryKey: ['pantry-places'] })
+      setOpenedModalType(null)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -202,13 +242,23 @@ export default function PantryPlacesPage() {
                   {PlaceStatusRecord[pantryPlace.status].title}
                 </Pill>
               </Table.Td>
-              <Table.Td>
-                <Button
-                  classNames={{ root: 'bg-black' }}
-                  onClick={() => handleUpdateButtonClick(pantryPlace)}
-                >
-                  Обновить
-                </Button>
+              <Table.Td w="20rem">
+                <Group>
+                  <Button
+                    classNames={{ root: 'bg-black' }}
+                    onClick={() => handleUpdateButtonClick(pantryPlace)}
+                  >
+                    Обновить
+                  </Button>
+                  {pantryPlace.status === PlaceStatusesEnum.Free && (
+                    <Button
+                      classNames={{ root: 'bg-black' }}
+                      onClick={() => handleBookButtonClick(pantryPlace)}
+                    >
+                      Забронировать
+                    </Button>
+                  )}
+                </Group>
               </Table.Td>
             </Table.Tr>
           ))}
@@ -216,19 +266,50 @@ export default function PantryPlacesPage() {
       </Table>
 
       <Modal
-        opened={isModalOpened}
+        opened={openedModalType === ModalTypes.UpdateForm}
         title={`Кладовое место №${selectedPantryPlace?.displayedNo}`}
         centered
         classNames={{ title: 'text-xl' }}
-        onClose={closeModal}
+        onClose={() => setOpenedModalType(null)}
       >
         {selectedPantryPlace !== null && (
           <PantryPlaceUpdateForm
             pantryPlace={selectedPantryPlace}
-            onSubmit={closeModal}
-            onCancel={closeModal}
+            onSubmit={() => setOpenedModalType(null)}
+            onCancel={() => setOpenedModalType(null)}
           />
         )}
+      </Modal>
+
+      <Modal
+        opened={openedModalType === ModalTypes.BookForm}
+        title={`Парковочное место №${selectedPantryPlace?.displayedNo}`}
+        centered
+        classNames={{ title: 'text-xl' }}
+        onClose={() => setOpenedModalType(null)}
+      >
+        <Stack gap="md" mb="xl">
+          <TextInput label="Имя" value="Администратор" readOnly />
+          <TextInput label="Почта" value="parking-chistoenebo@bk.ru" readOnly />
+          <TextInput label="Номер" value="+71111111111" readOnly />
+        </Stack>
+        <Group grow>
+          <Button
+            variant="outline"
+            loading={isCreatePurchaseRequestPending}
+            classNames={{ root: 'border-black', label: 'text-black' }}
+            onClick={() => setOpenedModalType(null)}
+          >
+            Закрыть
+          </Button>
+          <Button
+            loading={isCreatePurchaseRequestPending}
+            classNames={{ root: 'bg-black' }}
+            onClick={handlePlaceBook}
+          >
+            Забронировать
+          </Button>
+        </Group>
       </Modal>
     </>
   )
