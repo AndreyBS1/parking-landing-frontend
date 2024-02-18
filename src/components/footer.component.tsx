@@ -38,12 +38,12 @@ export default function Footer() {
           <p className="mb-6 lg:mb-4">
             Email:{' '}
             <Link
-              href="mail:sales@parking-chistoenebo.ru"
+              href="mail:parking-chistoenebo@bk.ru"
               target="_blank"
               rel="noreferrer"
               className="lowercase"
             >
-              sales@parking-chistoenebo.ru
+              parking-chistoenebo@bk.ru
             </Link>
           </p>
           <p className="mb-8 lg:mb-4">
