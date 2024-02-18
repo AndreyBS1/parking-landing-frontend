@@ -25,4 +25,10 @@ export const ParkingPlaceStatusMarkings: IParkingPlaceStatusMarking[] = [
     icon: '/icons/pantry-icon.svg',
     iconText: '',
   },
+  {
+    color: '#6C6C6C',
+    title: 'Акция',
+    icon: '/icons/discount-icon.svg',
+    iconText: '',
+  },
 ]

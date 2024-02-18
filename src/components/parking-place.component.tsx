@@ -52,7 +52,21 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
           {image ? (
             <img src={image} alt="" />
           ) : (
-            <div style={{ height: `${zoom * 5.35}rem`, width: `${zoom * 1.75}rem` }} />
+            <div
+              className="flex justify-center items-center"
+              style={{ height: `${zoom * 5.35}rem`, width: `${zoom * 1.75}rem` }}
+            >
+              {parkingPlace.previousPrice > 0 && (
+                <img
+                  src="/icons/discount-icon.svg"
+                  style={{
+                    height: `${zoom * 1}rem`,
+                    width: `${zoom * 1}rem`,
+                    marginBottom: '100%',
+                  }}
+                />
+              )}
+            </div>
           )}
         </div>
       </HoverCard.Target>
