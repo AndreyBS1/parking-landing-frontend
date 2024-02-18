@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter, redirect } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import AuthPage from './pages/auth.page'
 import CallRequestsPage from './pages/call-requests.page'
 import DashboardPage from './pages/dashboard.page'
@@ -28,13 +28,13 @@ const router = createBrowserRouter([
   },
   {
     path: 'admin',
-    loader: () => {
-      const accessToken = sessionStorage.getItem('access_token')
-      if (!accessToken) {
-        redirect('/admin/auth')
-      }
-      return null
-    },
+    // loader: () => {
+    //   const accessToken = sessionStorage.getItem('access_token')
+    //   if (!accessToken) {
+    //     return redirect('/admin/auth')
+    //   }
+    //   return null
+    // },
     children: [
       {
         path: 'auth',
@@ -68,8 +68,20 @@ const router = createBrowserRouter([
             path: 'call-requests',
             element: <CallRequestsPage />,
           },
+          // {
+          //   path: '*',
+          //   loader: () => {
+          //     return redirect('/admin/dashboard/parking-places')
+          //   },
+          // },
         ],
       },
+      // {
+      //   path: '*',
+      //   loader: () => {
+      //     return redirect('/admin/dashboard')
+      //   },
+      // },
     ],
   },
 ])
