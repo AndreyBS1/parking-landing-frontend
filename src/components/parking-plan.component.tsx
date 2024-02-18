@@ -174,7 +174,7 @@ export default function ParkingPlan() {
                 <p>{selectedFloorInfo.deadline}</p>
               </div>
               <div className="mb-3 flex justify-between items-center">
-                <p>МЕСТ В ПРОДАЖЕ:</p>
+                <p>МЕСТ НА ЭТАЖЕ:</p>
                 <p>{selectedFloorInfo.placesAmount}</p>
               </div>
               <div className="h-[2px] my-5 bg-black" />
@@ -324,7 +324,7 @@ export default function ParkingPlan() {
 
       <Modal
         opened={openedModalType === ModalTypes.ParkingForm}
-        title="Заявка на бронирование паркинга"
+        title="Заявка на бронирование машино-места"
         centered
         zIndex={1000}
         size="xl"

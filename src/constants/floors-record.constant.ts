@@ -16,7 +16,7 @@ export const FloorRecord: Record<number, IFloor> = {
     title: 'Третий этаж',
     type: 'НАЗЕМНЫЙ',
     deadline: 'ИЮНЬ 2024 Г.',
-    placesAmount: 85,
+    placesAmount: 78,
   },
   3: {
     title: 'Четвертый этаж',
@@ -34,7 +34,7 @@ export const FloorRecord: Record<number, IFloor> = {
     title: 'Шестой этаж',
     type: 'НАЗЕМНЫЙ',
     deadline: 'ИЮНЬ 2024 Г.',
-    placesAmount: 85,
+    placesAmount: 82,
   },
 }
 
