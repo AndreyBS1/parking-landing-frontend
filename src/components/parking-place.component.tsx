@@ -23,14 +23,14 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
 
   return (
     <HoverCard
-      width="22rem"
-      radius="xl"
+      width="18rem"
+      radius="lg"
       withArrow
       arrowSize={20}
       arrowPosition="center"
       closeDelay={0}
       disabled={parkingPlace.status !== PlaceStatusesEnum.Free}
-      classNames={{ dropdown: 'py-5 px-8' }}
+      classNames={{ dropdown: 'py-4 px-7' }}
     >
       <HoverCard.Target>
         <div
@@ -57,12 +57,16 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
         </div>
       </HoverCard.Target>
       <HoverCard.Dropdown>
-        <h3 className="mb-2 text-3xl">Место №{parkingPlace.displayedNo}</h3>
-        <div className="mb-1 flex justify-between">
+        <h3 className="mb-2 text-xl">Место №{parkingPlace.displayedNo}</h3>
+        <div className="mb-1 flex justify-between text-xs">
           <p>ТИП МЕСТА:</p>
           <p className="uppercase">{type}</p>
         </div>
-        <div className="h-16 flex justify-between">
+        <div className="mb-1 flex justify-between text-xs">
+          <p>ПЛОЩАДЬ:</p>
+          <p className="uppercase">{parkingPlace.area} м2</p>
+        </div>
+        <div className="h-10 flex justify-between text-xs">
           <p>СТОИМОСТЬ:</p>
           <div>
             {parkingPlace.previousPrice > 0 && (
@@ -80,7 +84,7 @@ export default function ParkingPlace(props: IParkingPlaceProps) {
             />
           </div>
         </div>
-        <Button className="w-full py-1" onClick={() => onSelect(parkingPlace.id)}>
+        <Button className="w-full py-1 text-xs" onClick={() => onSelect(parkingPlace.id)}>
           Забронировать
         </Button>
       </HoverCard.Dropdown>

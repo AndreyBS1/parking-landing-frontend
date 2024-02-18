@@ -23,14 +23,14 @@ export default function PantryPlace(props: IPantryPlaceProps) {
 
   return (
     <HoverCard
-      width="22rem"
-      radius="xl"
+      width="18rem"
+      radius="lg"
       withArrow
       arrowSize={20}
       arrowPosition="center"
       closeDelay={0}
       disabled={pantryPlace.status !== PlaceStatusesEnum.Free}
-      classNames={{ dropdown: 'py-5 px-8' }}
+      classNames={{ dropdown: 'py-4 px-7' }}
     >
       <HoverCard.Target>
         <div
@@ -52,8 +52,8 @@ export default function PantryPlace(props: IPantryPlaceProps) {
         </div>
       </HoverCard.Target>
       <HoverCard.Dropdown>
-        <h3 className="mb-2 text-3xl">Кладовая №{pantryPlace.displayedNo}</h3>
-        <div className="h-16 flex justify-between">
+        <h3 className="mb-2 text-xl">Кладовая №{pantryPlace.displayedNo}</h3>
+        <div className="h-10 flex justify-between text-xs">
           <p>СТОИМОСТЬ:</p>
           <div>
             {pantryPlace.previousPrice > 0 && (
@@ -71,7 +71,7 @@ export default function PantryPlace(props: IPantryPlaceProps) {
             />
           </div>
         </div>
-        <Button className="w-full py-1" onClick={() => onSelect(pantryPlace.id)}>
+        <Button className="w-full py-1 text-xs" onClick={() => onSelect(pantryPlace.id)}>
           Забронировать
         </Button>
       </HoverCard.Dropdown>
