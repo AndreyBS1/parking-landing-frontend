@@ -11,6 +11,6 @@ export const PurchaseRequestStatusRecord: Record<
 > = {
   [PurchaseRequestStatusesEnum.Idle]: { color: 'gray', title: 'В ожидании' },
   [PurchaseRequestStatusesEnum.InProcess]: { color: 'black', title: 'В обработке' },
-  [PurchaseRequestStatusesEnum.Approved]: { color: 'green', title: 'Одобрена' },
+  [PurchaseRequestStatusesEnum.Approved]: { color: 'green', title: 'Продано' },
   [PurchaseRequestStatusesEnum.Rejected]: { color: 'red', title: 'Отклонена' },
 }

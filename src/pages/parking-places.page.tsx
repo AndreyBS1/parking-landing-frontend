@@ -18,6 +18,7 @@ import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
 import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
 import { PlacePriceTypesEnum } from '../enums/place-price-types.enum'
+import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 import { IParkingPlace } from '../types/parking-place.type'
 
 const floorFilterData = [
@@ -39,11 +40,18 @@ const priceTypeFilterData = [
   { label: 'Без скидки', value: String(PlacePriceTypesEnum.NonPromotional) },
 ]
 
+const statusFilterData = [
+  { label: 'Свободно', value: String(PlaceStatusesEnum.Free) },
+  { label: 'Забронировано', value: String(PlaceStatusesEnum.Booked) },
+  { label: 'Продано', value: String(PlaceStatusesEnum.Sold) },
+]
+
 type TFilterOptions = {
   number: string | null
   floor: string | null
   type: string | null
   priceType: string | null
+  status: string | null
 }
 
 export default function ParkingPlacesPage() {
@@ -58,6 +66,7 @@ export default function ParkingPlacesPage() {
     floor: null,
     type: null,
     priceType: null,
+    status: null,
   })
   const [selectedParkingPlace, setSelectedParkingPlace] = useState<IParkingPlace | null>(
     null
@@ -84,7 +93,7 @@ export default function ParkingPlacesPage() {
 
   const filteredData = data.filter((parkingPlace) => {
     let isParkingPlaceValid = true
-    const { number, floor, type, priceType } = filterOptions
+    const { number, floor, type, priceType, status } = filterOptions
     if (number && !String(parkingPlace.displayedNo).startsWith(number)) {
       isParkingPlaceValid = false
     }
@@ -108,6 +117,9 @@ export default function ParkingPlacesPage() {
       ) {
         isParkingPlaceValid = false
       }
+    }
+    if (status && parkingPlace.status !== Number(status)) {
+      isParkingPlaceValid = false
     }
     return isParkingPlaceValid
   })
@@ -159,6 +171,13 @@ export default function ParkingPlacesPage() {
           data={priceTypeFilterData}
           value={filterOptions.priceType}
           onChange={(value) => handleFilterOptionChange('priceType', value)}
+        />
+        <Select
+          label="Статус"
+          placeholder="Выберите статус"
+          data={statusFilterData}
+          value={filterOptions.status}
+          onChange={(value) => handleFilterOptionChange('status', value)}
         />
       </Group>
       <Table striped={filteredData.length > 0} highlightOnHover={filteredData.length > 0}>

@@ -4,6 +4,7 @@ import {
   Loader,
   Modal,
   Pill,
+  Select,
   Stack,
   Table,
   TextInput,
@@ -18,12 +19,28 @@ import { PurchaseRequestStatusRecord } from '../constants/purchase-request-statu
 import { PurchaseRequestStatusesEnum } from '../enums/purchase-request-statuses.enum'
 import { IPantryPurchaseRequest } from '../types/pantry-purchase-request.type'
 
+const statusFilterData = [
+  { label: 'В ожидании', value: String(PurchaseRequestStatusesEnum.Idle) },
+  { label: 'В обработке', value: String(PurchaseRequestStatusesEnum.InProcess) },
+  { label: 'Продано', value: String(PurchaseRequestStatusesEnum.Approved) },
+]
+
+type TFilterOptions = {
+  status: string | null
+}
+
 export default function PantryPurchaseRequestsPage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['pantry-purchase-requests'],
     queryFn: getPantryPurchaseRequests,
   })
+
   const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure()
+
+  const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
+    status: null,
+  })
+
   const {
     mutate: updatePurchaseRequestStatusMutation,
     isPending: isUpdateStatusPending,
@@ -63,6 +80,25 @@ export default function PantryPurchaseRequestsPage() {
     )
   }
 
+  const filteredData = data.filter((purchaseRequest) => {
+    let isPurchaseRequestValid = true
+    const { status } = filterOptions
+    if (status && purchaseRequest.status !== Number(status)) {
+      isPurchaseRequestValid = false
+    }
+    return isPurchaseRequestValid
+  })
+
+  const handleFilterOptionChange = (
+    option: keyof TFilterOptions,
+    value: string | null
+  ) => {
+    setFilterOptions((prevFilterOptions) => ({
+      ...prevFilterOptions,
+      [option]: value,
+    }))
+  }
+
   const handleShowMoreButtonClick = (purchaseRequest: IPantryPurchaseRequest) => {
     setSelectedPurchaseRequest(purchaseRequest)
     openModal()
@@ -70,7 +106,16 @@ export default function PantryPurchaseRequestsPage() {
 
   return (
     <>
-      <Table striped={data.length > 0} highlightOnHover={data.length > 0}>
+      <Group mb="xl">
+        <Select
+          label="Статус"
+          placeholder="Выберите статус"
+          data={statusFilterData}
+          value={filterOptions.status}
+          onChange={(value) => handleFilterOptionChange('status', value)}
+        />
+      </Group>
+      <Table striped={filteredData.length > 0} highlightOnHover={filteredData.length > 0}>
         <Table.Thead>
           <Table.Th>Дата</Table.Th>
           <Table.Th>Имя</Table.Th>
@@ -80,7 +125,7 @@ export default function PantryPurchaseRequestsPage() {
           <Table.Th></Table.Th>
         </Table.Thead>
         <Table.Tbody>
-          {data.length === 0 && (
+          {filteredData.length === 0 && (
             <Table.Tr>
               <Table.Td colSpan={6}>
                 <div className="h-96 flex justify-center items-center">
@@ -89,7 +134,7 @@ export default function PantryPurchaseRequestsPage() {
               </Table.Td>
             </Table.Tr>
           )}
-          {data.map((purchaseRequest) => (
+          {filteredData.map((purchaseRequest) => (
             <Table.Tr key={purchaseRequest.id}>
               <Table.Td>
                 {new Date(purchaseRequest.createdAt).toLocaleDateString('ru')}

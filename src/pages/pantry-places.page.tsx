@@ -16,6 +16,7 @@ import { getPantryPlaces } from '../api/get-pantry-places'
 import PantryPlaceUpdateForm from '../components/pantry-place-update-form.component'
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
 import { PlacePriceTypesEnum } from '../enums/place-price-types.enum'
+import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 import { IPantryPlace } from '../types/pantry-place.type'
 
 const floorFilterData = [
@@ -31,10 +32,17 @@ const priceTypeFilterData = [
   { label: 'Без скидки', value: String(PlacePriceTypesEnum.NonPromotional) },
 ]
 
+const statusFilterData = [
+  { label: 'Свободно', value: String(PlaceStatusesEnum.Free) },
+  { label: 'Забронировано', value: String(PlaceStatusesEnum.Booked) },
+  { label: 'Продано', value: String(PlaceStatusesEnum.Sold) },
+]
+
 type TFilterOptions = {
   number: string | null
   floor: string | null
   priceType: string | null
+  status: string | null
 }
 
 export default function PantryPlacesPage() {
@@ -48,6 +56,7 @@ export default function PantryPlacesPage() {
     number: null,
     floor: null,
     priceType: null,
+    status: null,
   })
   const [selectedPantryPlace, setSelectedPantryPlace] = useState<IPantryPlace | null>(
     null
@@ -72,34 +81,35 @@ export default function PantryPlacesPage() {
     )
   }
 
-  const filteredData = data
-    .filter((pantryPlace) => {
-      let isPantryPlaceValid = true
-      const { number, floor, priceType } = filterOptions
-      if (number && !String(pantryPlace.displayedNo).startsWith(number)) {
+  const filteredData = data.filter((pantryPlace) => {
+    let isPantryPlaceValid = true
+    const { number, floor, priceType, status } = filterOptions
+    if (number && !String(pantryPlace.displayedNo).startsWith(number)) {
+      isPantryPlaceValid = false
+    }
+    if (floor && pantryPlace.floor !== Number(floor)) {
+      isPantryPlaceValid = false
+    }
+    if (priceType !== null) {
+      const priceTypeValue = Number(priceType)
+      if (
+        priceTypeValue === PlacePriceTypesEnum.Promotional &&
+        pantryPlace.previousPrice === 0
+      ) {
         isPantryPlaceValid = false
       }
-      if (floor && pantryPlace.floor !== Number(floor)) {
+      if (
+        priceTypeValue === PlacePriceTypesEnum.NonPromotional &&
+        pantryPlace.previousPrice !== 0
+      ) {
         isPantryPlaceValid = false
       }
-      if (priceType !== null) {
-        const priceTypeValue = Number(priceType)
-        if (
-          priceTypeValue === PlacePriceTypesEnum.Promotional &&
-          pantryPlace.previousPrice === 0
-        ) {
-          isPantryPlaceValid = false
-        }
-        if (
-          priceTypeValue === PlacePriceTypesEnum.NonPromotional &&
-          pantryPlace.previousPrice !== 0
-        ) {
-          isPantryPlaceValid = false
-        }
-      }
-      return isPantryPlaceValid
-    })
-    .sort((placeA, placeB) => placeA.displayedNo - placeB.displayedNo)
+    }
+    if (status && pantryPlace.status !== Number(status)) {
+      isPantryPlaceValid = false
+    }
+    return isPantryPlaceValid
+  })
 
   const handleFilterOptionChange = (
     option: keyof TFilterOptions,
@@ -141,6 +151,13 @@ export default function PantryPlacesPage() {
           data={priceTypeFilterData}
           value={filterOptions.priceType}
           onChange={(value) => handleFilterOptionChange('priceType', value)}
+        />
+        <Select
+          label="Статус"
+          placeholder="Выберите статус"
+          data={statusFilterData}
+          value={filterOptions.status}
+          onChange={(value) => handleFilterOptionChange('status', value)}
         />
       </Group>
       <Table striped={filteredData.length > 0} highlightOnHover={filteredData.length > 0}>
