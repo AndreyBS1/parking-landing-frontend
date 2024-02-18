@@ -7,12 +7,15 @@ import {
   NumberInput,
   Pill,
   Select,
+  Stack,
   Table,
+  TextInput,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { createPurchaseRequest } from '../api/create-purschase-request'
 import { getParkingPlaces } from '../api/get-parking-places'
+import { queryClient } from '../api/query-client'
 import ParkingPlaceUpdateForm from '../components/parking-place-update-form.component'
 import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record.constant'
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
@@ -20,6 +23,19 @@ import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
 import { PlacePriceTypesEnum } from '../enums/place-price-types.enum'
 import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 import { IParkingPlace } from '../types/parking-place.type'
+
+enum ModalTypes {
+  UpdateForm,
+  BookForm,
+}
+
+type TFilterOptions = {
+  number: string | null
+  floor: string | null
+  type: string | null
+  priceType: string | null
+  status: string | null
+}
 
 const floorFilterData = [
   { label: '2', value: '1' },
@@ -46,20 +62,18 @@ const statusFilterData = [
   { label: 'Продано', value: String(PlaceStatusesEnum.Sold) },
 ]
 
-type TFilterOptions = {
-  number: string | null
-  floor: string | null
-  type: string | null
-  priceType: string | null
-  status: string | null
-}
-
 export default function ParkingPlacesPage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['parking-places'],
     queryFn: getParkingPlaces,
   })
-  const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure()
+
+  const {
+    mutateAsync: createPurchaseRequestMutation,
+    isPending: isCreatePurchaseRequestPending,
+  } = useMutation({
+    mutationFn: createPurchaseRequest,
+  })
 
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
     number: null,
@@ -68,9 +82,12 @@ export default function ParkingPlacesPage() {
     priceType: null,
     status: null,
   })
+
   const [selectedParkingPlace, setSelectedParkingPlace] = useState<IParkingPlace | null>(
     null
   )
+
+  const [openedModalType, setOpenedModalType] = useState<ModalTypes | null>(null)
 
   if (isLoading) {
     return (
@@ -136,7 +153,30 @@ export default function ParkingPlacesPage() {
 
   const handleUpdateButtonClick = (parkingPlace: IParkingPlace) => {
     setSelectedParkingPlace(parkingPlace)
-    openModal()
+    setOpenedModalType(ModalTypes.UpdateForm)
+  }
+
+  const handleBookButtonClick = (parkingPlace: IParkingPlace) => {
+    setSelectedParkingPlace(parkingPlace)
+    setOpenedModalType(ModalTypes.BookForm)
+  }
+
+  const handlePlaceBook = async () => {
+    if (!selectedParkingPlace) {
+      return
+    }
+    try {
+      await createPurchaseRequestMutation({
+        parkingPlaceId: selectedParkingPlace.id,
+        customerName: 'Администратор',
+        customerEmail: 'parking-chistoenebo@bk.ru',
+        customerPhoneNumber: '+71111111111',
+      })
+      queryClient.invalidateQueries({ queryKey: ['parking-places'] })
+      setOpenedModalType(null)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -225,12 +265,22 @@ export default function ParkingPlacesPage() {
                 </Pill>
               </Table.Td>
               <Table.Td>
-                <Button
-                  classNames={{ root: 'bg-black' }}
-                  onClick={() => handleUpdateButtonClick(parkingPlace)}
-                >
-                  Обновить
-                </Button>
+                <Group>
+                  <Button
+                    classNames={{ root: 'bg-black' }}
+                    onClick={() => handleUpdateButtonClick(parkingPlace)}
+                  >
+                    Обновить
+                  </Button>
+                  {parkingPlace.status === PlaceStatusesEnum.Free && (
+                    <Button
+                      classNames={{ root: 'bg-black' }}
+                      onClick={() => handleBookButtonClick(parkingPlace)}
+                    >
+                      Забронировать
+                    </Button>
+                  )}
+                </Group>
               </Table.Td>
             </Table.Tr>
           ))}
@@ -238,19 +288,50 @@ export default function ParkingPlacesPage() {
       </Table>
 
       <Modal
-        opened={isModalOpened}
+        opened={openedModalType === ModalTypes.UpdateForm}
         title={`Парковочное место №${selectedParkingPlace?.displayedNo}`}
         centered
         classNames={{ title: 'text-xl' }}
-        onClose={closeModal}
+        onClose={() => setOpenedModalType(null)}
       >
         {selectedParkingPlace !== null && (
           <ParkingPlaceUpdateForm
             parkingPlace={selectedParkingPlace}
-            onSubmit={closeModal}
-            onCancel={closeModal}
+            onSubmit={() => setOpenedModalType(null)}
+            onCancel={() => setOpenedModalType(null)}
           />
         )}
+      </Modal>
+
+      <Modal
+        opened={openedModalType === ModalTypes.BookForm}
+        title={`Парковочное место №${selectedParkingPlace?.displayedNo}`}
+        centered
+        classNames={{ title: 'text-xl' }}
+        onClose={() => setOpenedModalType(null)}
+      >
+        <Stack gap="md" mb="xl">
+          <TextInput label="Имя" value="Администратор" readOnly />
+          <TextInput label="Почта" value="parking-chistoenebo@bk.ru" readOnly />
+          <TextInput label="Номер" value="+71111111111" readOnly />
+        </Stack>
+        <Group grow>
+          <Button
+            variant="outline"
+            loading={isCreatePurchaseRequestPending}
+            classNames={{ root: 'border-black', label: 'text-black' }}
+            onClick={() => setOpenedModalType(null)}
+          >
+            Закрыть
+          </Button>
+          <Button
+            loading={isCreatePurchaseRequestPending}
+            classNames={{ root: 'bg-black' }}
+            onClick={handlePlaceBook}
+          >
+            Забронировать
+          </Button>
+        </Group>
       </Modal>
     </>
   )
