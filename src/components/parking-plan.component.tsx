@@ -212,6 +212,32 @@ export default function ParkingPlan() {
                   +7 (911) 775-11-11
                 </Link>
                 {/* <DownloadPdfButton /> */}
+                <div className="flex gap-x-3">
+                  <a
+                    href="https://wa.me/79117751111"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block cursor-pointer"
+                  >
+                    <img
+                      src="/icons/whatsapp-colored-icon.svg"
+                      alt="Whats App"
+                      className="h-10 w-10"
+                    />
+                  </a>
+                  <a
+                    href="https://t.me/+79117751111"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block cursor-pointer"
+                  >
+                    <img
+                      src="/icons/telegram-colored-icon.svg"
+                      alt="Whats App"
+                      className="h-10 w-10"
+                    />
+                  </a>
+                </div>
               </div>
             </div>
           </div>

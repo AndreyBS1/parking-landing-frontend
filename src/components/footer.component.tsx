@@ -21,7 +21,7 @@ export default function Footer() {
       >
         <div className="mb-14 lg:mb-0">
           <h2 className="text-5xl font-bold">Контакты</h2>
-          <p className="mb-6">
+          <p className="mb-6 lg:mb-4">
             Адрес: г. Санкт-Петербург, Комендантский
             <br />
             проспект, дом 66, корпус 2
@@ -31,11 +31,11 @@ export default function Footer() {
             href="tel:+79117751111"
             target="_blank"
             rel="noreferrer"
-            className="mb-6 block"
+            className="mb-6 lg:mb-4 block"
           >
             +7 (911) 775-11-11
           </Link>
-          <p className="mb-6">
+          <p className="mb-6 lg:mb-4">
             Email:{' '}
             <Link
               href="mail:sales@parking-chistoenebo.ru"
@@ -46,7 +46,7 @@ export default function Footer() {
               sales@parking-chistoenebo.ru
             </Link>
           </p>
-          <p>
+          <p className="mb-8 lg:mb-4">
             Запишитесь на бесплатную консультацию{' '}
             <button
               className="bg-none border-none underline underline-offset-2 hover:text-primary transition-colors"
@@ -55,6 +55,32 @@ export default function Footer() {
               тут
             </button>
           </p>
+          <div className="flex gap-x-3">
+            <a
+              href="https://wa.me/79117751111"
+              target="_blank"
+              rel="noreferrer"
+              className="block cursor-pointer"
+            >
+              <img
+                src="/icons/whatsapp-white-icon.svg"
+                alt="Whats App"
+                className="h-10 w-10"
+              />
+            </a>
+            <a
+              href="https://t.me/+79117751111"
+              target="_blank"
+              rel="noreferrer"
+              className="block cursor-pointer"
+            >
+              <img
+                src="/icons/telegram-white-icon.svg"
+                alt="Whats App"
+                className="h-10 w-10"
+              />
+            </a>
+          </div>
         </div>
         <div>
           <img src="/images/logo.png" alt="" className="w-[2.65rem]" />
