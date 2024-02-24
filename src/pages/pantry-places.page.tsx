@@ -7,16 +7,13 @@ import {
   NumberInput,
   Pill,
   Select,
-  Stack,
   Table,
-  TextInput,
 } from '@mantine/core'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { createPantryPurchaseRequest } from '../api/create-pantry-purchase-request'
 import { getPantryPlaces } from '../api/get-pantry-places'
-import { queryClient } from '../api/query-client'
 import PantryPlaceUpdateForm from '../components/pantry-place-update-form.component'
+import PlaceBookingAdminForm from '../components/place-booking-admin-form.component'
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
 import { PlacePriceTypesEnum } from '../enums/place-price-types.enum'
 import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
@@ -57,13 +54,6 @@ export default function PantryPlacesPage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['pantry-places'],
     queryFn: getPantryPlaces,
-  })
-
-  const {
-    mutateAsync: createPantryPurchaseRequestMutation,
-    isPending: isCreatePurchaseRequestPending,
-  } = useMutation({
-    mutationFn: createPantryPurchaseRequest,
   })
 
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
@@ -146,24 +136,6 @@ export default function PantryPlacesPage() {
   const handleBookButtonClick = (pantryPlace: IPantryPlace) => {
     setSelectedPantryPlace(pantryPlace)
     setOpenedModalType(ModalTypes.BookForm)
-  }
-
-  const handlePlaceBook = async () => {
-    if (!selectedPantryPlace) {
-      return
-    }
-    try {
-      await createPantryPurchaseRequestMutation({
-        pantryPlaceId: selectedPantryPlace.id,
-        customerName: 'Администратор',
-        customerEmail: 'parking-chistoenebo@bk.ru',
-        customerPhoneNumber: '+71111111111',
-      })
-      queryClient.invalidateQueries({ queryKey: ['pantry-places'] })
-      setOpenedModalType(null)
-    } catch (error) {
-      console.error(error)
-    }
   }
 
   return (
@@ -288,28 +260,13 @@ export default function PantryPlacesPage() {
         classNames={{ title: 'text-xl' }}
         onClose={() => setOpenedModalType(null)}
       >
-        <Stack gap="md" mb="xl">
-          <TextInput label="Имя" value="Администратор" readOnly />
-          <TextInput label="Почта" value="parking-chistoenebo@bk.ru" readOnly />
-          <TextInput label="Номер" value="+71111111111" readOnly />
-        </Stack>
-        <Group grow>
-          <Button
-            variant="outline"
-            loading={isCreatePurchaseRequestPending}
-            classNames={{ root: 'border-black', label: 'text-black' }}
-            onClick={() => setOpenedModalType(null)}
-          >
-            Закрыть
-          </Button>
-          <Button
-            loading={isCreatePurchaseRequestPending}
-            classNames={{ root: 'bg-black' }}
-            onClick={handlePlaceBook}
-          >
-            Забронировать
-          </Button>
-        </Group>
+        <PlaceBookingAdminForm
+          placeId={selectedPantryPlace?.id ?? 0}
+          placeType="pantry"
+          onCancel={() => setOpenedModalType(null)}
+          onSubmit={() => setOpenedModalType(null)}
+          onError={() => null}
+        />
       </Modal>
     </>
   )

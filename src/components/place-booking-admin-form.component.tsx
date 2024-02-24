@@ -1,13 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, Group, Stack, TextInput } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { createPantryPurchaseRequest } from '../api/create-pantry-purchase-request'
 import { createPurchaseRequest } from '../api/create-purschase-request'
 import { queryClient } from '../api/query-client'
-import Button from '../shared-ui/button.component'
-import ControlledCheckbox from '../shared-ui/controlled-checkbox.component'
-import ControlledTextInput from '../shared-ui/controlled-text-input.component'
 import { PhoneNumberRegExp } from '../utils/reg-exps'
 import { StringSchema } from '../utils/validation-schemas'
 
@@ -18,30 +16,20 @@ const schema = z.object({
     'Пожалуйста, введите корректный номер телефона'
   ),
   email: StringSchema.email('Пожалуйста, введите корректный e-mail'),
-  isAgreedWithTerms: z
-    .boolean({
-      required_error:
-        'Пожалуйста, подтвердите, что согласны с условиями обработки данных',
-      invalid_type_error:
-        'Пожалуйста, подтвердите, что согласны с условиями обработки данных',
-    })
-    .refine(
-      (value) => value || undefined,
-      'Пожалуйста, подтвердите, что согласны с условиями обработки данных'
-    ),
 })
 
 type TFormData = z.infer<typeof schema>
 
-interface IPlaceBookingFormProps {
+interface IPlaceBookingAdminFormProps {
   placeId: number
   placeType: 'parking' | 'pantry'
+  onCancel: () => void
   onSubmit: () => void
   onError: () => void
 }
 
-export default function PlaceBookingForm(props: IPlaceBookingFormProps) {
-  const { placeId, placeType, onSubmit, onError } = props
+export default function PlaceBookingAdminForm(props: IPlaceBookingAdminFormProps) {
+  const { placeId, placeType, onCancel, onSubmit, onError } = props
 
   const { control, handleSubmit } = useForm<TFormData>({
     resolver: zodResolver(schema),
@@ -54,11 +42,6 @@ export default function PlaceBookingForm(props: IPlaceBookingFormProps) {
   })
 
   const handleFormSubmit: SubmitHandler<TFormData> = async (data) => {
-    const bookingLimit = Number(localStorage.getItem('booking_limit') || 0)
-    if (bookingLimit >= 5) {
-      onError?.()
-      return
-    }
     try {
       if (placeType === 'parking') {
         await createPurchaseRequestMutation({
@@ -78,7 +61,6 @@ export default function PlaceBookingForm(props: IPlaceBookingFormProps) {
         })
         queryClient.invalidateQueries({ queryKey: ['pantry-places'] })
       }
-      localStorage.setItem('booking_limit', String(bookingLimit + 1))
       onSubmit()
     } catch (error) {
       console.error(error)
@@ -88,34 +70,58 @@ export default function PlaceBookingForm(props: IPlaceBookingFormProps) {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <ControlledTextInput
-        control={control}
-        name="name"
-        label="Ваше имя"
-        className="mb-4"
-      />
-      <ControlledTextInput
-        control={control}
-        name="phoneNumber"
-        label="Ваш телефон"
-        prefix="+7"
-        className="mb-4"
-      />
-      <ControlledTextInput
-        control={control}
-        name="email"
-        label="Ваш e-mail"
-        className="mb-4"
-      />
-      <ControlledCheckbox
-        control={control}
-        name="isAgreedWithTerms"
-        label="Нажимая кнопку “Отправить”, вы соглашаетесь с условиями обработки личных данных"
-        className="mb-6"
-      />
-      <Button type="submit" className="w-full py-1">
-        Отправить
-      </Button>
+      <Stack gap="md" mb="xl">
+        <Controller
+          control={control}
+          name="name"
+          render={({ field, fieldState: { error } }) => (
+            <TextInput
+              {...field}
+              label="Имя"
+              error={error?.message}
+              onChange={(event) => field.onChange(event)}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="email"
+          render={({ field, fieldState: { error } }) => (
+            <TextInput
+              {...field}
+              label="Почта"
+              error={error?.message}
+              onChange={(event) => field.onChange(event)}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="phoneNumber"
+          render={({ field, fieldState: { error } }) => (
+            <TextInput
+              {...field}
+              label="Номер"
+              error={error?.message}
+              leftSection={<p>+7</p>}
+              onChange={(event) => field.onChange(event)}
+            />
+          )}
+        />
+      </Stack>
+      <Group grow>
+        <Button
+          type="button"
+          variant="outline"
+          classNames={{ root: 'border-black', label: 'text-black' }}
+          onClick={onCancel}
+        >
+          Закрыть
+        </Button>
+        <Button type="submit" classNames={{ root: 'bg-black' }}>
+          Забронировать
+        </Button>
+      </Group>
     </form>
   )
 }

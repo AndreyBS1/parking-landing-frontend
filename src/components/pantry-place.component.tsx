@@ -53,6 +53,10 @@ export default function PantryPlace(props: IPantryPlaceProps) {
       </HoverCard.Target>
       <HoverCard.Dropdown>
         <h3 className="mb-2 text-xl">Кладовая №{pantryPlace.displayedNo}</h3>
+        <div className="mb-1 flex justify-between text-xs">
+          <p>ПЛОЩАДЬ:</p>
+          <p className="uppercase">{pantryPlace.area} м2</p>
+        </div>
         <div className="h-10 flex justify-between text-xs">
           <p>СТОИМОСТЬ:</p>
           <div>

@@ -3,12 +3,14 @@ import {
   Group,
   Loader,
   Modal,
+  NumberInput,
   Pill,
   Select,
   Stack,
   Table,
   TextInput,
 } from '@mantine/core'
+import { DateInput } from '@mantine/dates'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { deletePurchaseRequest } from '../api/delete-purchase-request'
@@ -33,6 +35,8 @@ const statusFilterData = [
 ]
 
 type TFilterOptions = {
+  date: Date | null
+  placeNumber: string | null
   status: string | null
 }
 
@@ -63,6 +67,8 @@ export default function PurchaseRequestsPage() {
     })
 
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
+    date: null,
+    placeNumber: null,
     status: null,
   })
 
@@ -102,7 +108,20 @@ export default function PurchaseRequestsPage() {
 
   const filteredData = data.filter((purchaseRequest) => {
     let isPurchaseRequestValid = true
-    const { status } = filterOptions
+    const { date, placeNumber, status } = filterOptions
+    if (date !== null) {
+      const selectedDateString = date.toDateString()
+      const requestCreatedDateString = new Date(purchaseRequest.createdAt).toDateString()
+      if (selectedDateString !== requestCreatedDateString) {
+        isPurchaseRequestValid = false
+      }
+    }
+    if (
+      placeNumber &&
+      !String(purchaseRequest.parkingPlace.displayedNo).startsWith(placeNumber)
+    ) {
+      isPurchaseRequestValid = false
+    }
     if (status && purchaseRequest.status !== Number(status)) {
       isPurchaseRequestValid = false
     }
@@ -111,7 +130,7 @@ export default function PurchaseRequestsPage() {
 
   const handleFilterOptionChange = (
     option: keyof TFilterOptions,
-    value: string | null
+    value: Date | string | null
   ) => {
     setFilterOptions((prevFilterOptions) => ({
       ...prevFilterOptions,
@@ -139,6 +158,23 @@ export default function PurchaseRequestsPage() {
   return (
     <>
       <Group mb="xl">
+        <DateInput
+          label="Дата"
+          placeholder="Выберите дату"
+          value={filterOptions.date}
+          valueFormat="DD.MM.YYYY"
+          clearable
+          onChange={(value) => handleFilterOptionChange('date', value)}
+        />
+        <NumberInput
+          label="Номер места"
+          placeholder="Введите номер"
+          value={filterOptions.placeNumber ?? ''}
+          min={1}
+          onChange={(value) =>
+            handleFilterOptionChange('placeNumber', value ? String(value) : null)
+          }
+        />
         <Select
           label="Статус"
           placeholder="Выберите статус"
@@ -153,6 +189,7 @@ export default function PurchaseRequestsPage() {
           <Table.Th>Имя</Table.Th>
           <Table.Th>Телефон</Table.Th>
           <Table.Th>Почта</Table.Th>
+          <Table.Th>Номер м/м</Table.Th>
           <Table.Th>Статус</Table.Th>
           <Table.Th></Table.Th>
         </Table.Thead>
@@ -174,6 +211,7 @@ export default function PurchaseRequestsPage() {
               <Table.Td>{purchaseRequest.customerName}</Table.Td>
               <Table.Td>{purchaseRequest.customerPhoneNumber}</Table.Td>
               <Table.Td>{purchaseRequest.customerEmail}</Table.Td>
+              <Table.Td>{purchaseRequest.parkingPlace.displayedNo}</Table.Td>
               <Table.Td>
                 <Pill color={PurchaseRequestStatusRecord[purchaseRequest.status].color}>
                   {PurchaseRequestStatusRecord[purchaseRequest.status].title}
@@ -329,13 +367,18 @@ export default function PurchaseRequestsPage() {
 
       <Modal
         opened={openedModalType === ModalTypes.Delete}
+        title={`Удалить заявку на покупку места №${selectedPurchaseRequest?.parkingPlace.displayedNo}?`}
         centered
+        size="lg"
+        classNames={{ title: 'text-xl' }}
         onClose={() => setOpenedModalType(null)}
       >
-        <h2 className="text-center text-xl mb-3">Удалить запрос?</h2>
-        <p className="text-center mb-10 leading-tight">
-          После удаления запроса нельзя будет изменить статус места через административную
+        <p className="mb-3 leading-tight">
+          После удаления заявки нельзя будет изменить статус места через административную
           панель
+        </p>
+        <p className="mb-10 font-semibold leading-tight">
+          Пожалуйста, перед удалением, убедитесь, что заявке не присвоен статус
         </p>
         <Group grow>
           <Button

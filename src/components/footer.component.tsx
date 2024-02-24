@@ -19,31 +19,49 @@ export default function Footer() {
         id="contacts"
         className="shrink-0 grow bg-additional text-white pt-14 pb-20 px-10 lg:pl-32 lg:pr-28 lg:flex justify-between items-end"
       >
-        <div className="mb-14 lg:mb-0">
-          <h2 className="text-5xl font-bold">Контакты</h2>
-          <p className="mb-6 lg:mb-4">
+        <div className="mb-14 lg:mb-0 lg:text-xs">
+          <h2 className="mb-6 lg:mb-2 text-5xl lg:text-2xl font-bold">Контакты</h2>
+          <p className="mb-6 lg:mb-2">
             Адрес: г. Санкт-Петербург, Комендантский
             <br />
             проспект, дом 66, корпус 2
+          </p>
+          <p className="mb-6 lg:mb-2">
+            Расписание работы/просмотров отдела продаж:
+            <br />
+            вторник и четверг с 17:00 до 19:30
+            <br />
+            Цены действуют до 10 марта 2024 года
           </p>
           <p>Телефон:</p>
           <Link
             href="tel:+79117751111"
             target="_blank"
             rel="noreferrer"
-            className="mb-6 lg:mb-4 block"
+            className="mb-6 lg:mb-2 block"
           >
             +7 (911) 775-11-11
           </Link>
-          <p className="mb-6 lg:mb-4">
+          <p>
             Email:{' '}
             <Link
-              href="mail:parking-chistoenebo@bk.ru"
+              href="mailto:parking-chistoenebo@bk.ru"
               target="_blank"
               rel="noreferrer"
               className="lowercase"
             >
               parking-chistoenebo@bk.ru
+            </Link>
+          </p>
+          <p className="mb-6 lg:mb-2">
+            Доп. email:{' '}
+            <Link
+              href="mailto:9117751111@mail.ru"
+              target="_blank"
+              rel="noreferrer"
+              className="lowercase"
+            >
+              9117751111@mail.ru
             </Link>
           </p>
           <p className="mb-8 lg:mb-4">

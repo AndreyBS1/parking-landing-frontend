@@ -7,16 +7,13 @@ import {
   NumberInput,
   Pill,
   Select,
-  Stack,
   Table,
-  TextInput,
 } from '@mantine/core'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { createPurchaseRequest } from '../api/create-purschase-request'
 import { getParkingPlaces } from '../api/get-parking-places'
-import { queryClient } from '../api/query-client'
 import ParkingPlaceUpdateForm from '../components/parking-place-update-form.component'
+import PlaceBookingAdminForm from '../components/place-booking-admin-form.component'
 import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record.constant'
 import { PlaceStatusRecord } from '../constants/place-status-record.constant'
 import { ParkingPlaceTypesEnum } from '../enums/parking-place-types.enum'
@@ -66,13 +63,6 @@ export default function ParkingPlacesPage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['parking-places'],
     queryFn: getParkingPlaces,
-  })
-
-  const {
-    mutateAsync: createPurchaseRequestMutation,
-    isPending: isCreatePurchaseRequestPending,
-  } = useMutation({
-    mutationFn: createPurchaseRequest,
   })
 
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
@@ -159,24 +149,6 @@ export default function ParkingPlacesPage() {
   const handleBookButtonClick = (parkingPlace: IParkingPlace) => {
     setSelectedParkingPlace(parkingPlace)
     setOpenedModalType(ModalTypes.BookForm)
-  }
-
-  const handlePlaceBook = async () => {
-    if (!selectedParkingPlace) {
-      return
-    }
-    try {
-      await createPurchaseRequestMutation({
-        parkingPlaceId: selectedParkingPlace.id,
-        customerName: 'Администратор',
-        customerEmail: 'parking-chistoenebo@bk.ru',
-        customerPhoneNumber: '+71111111111',
-      })
-      queryClient.invalidateQueries({ queryKey: ['parking-places'] })
-      setOpenedModalType(null)
-    } catch (error) {
-      console.error(error)
-    }
   }
 
   return (
@@ -310,28 +282,13 @@ export default function ParkingPlacesPage() {
         classNames={{ title: 'text-xl' }}
         onClose={() => setOpenedModalType(null)}
       >
-        <Stack gap="md" mb="xl">
-          <TextInput label="Имя" value="Администратор" readOnly />
-          <TextInput label="Почта" value="parking-chistoenebo@bk.ru" readOnly />
-          <TextInput label="Номер" value="+71111111111" readOnly />
-        </Stack>
-        <Group grow>
-          <Button
-            variant="outline"
-            loading={isCreatePurchaseRequestPending}
-            classNames={{ root: 'border-black', label: 'text-black' }}
-            onClick={() => setOpenedModalType(null)}
-          >
-            Закрыть
-          </Button>
-          <Button
-            loading={isCreatePurchaseRequestPending}
-            classNames={{ root: 'bg-black' }}
-            onClick={handlePlaceBook}
-          >
-            Забронировать
-          </Button>
-        </Group>
+        <PlaceBookingAdminForm
+          placeId={selectedParkingPlace?.id ?? 0}
+          placeType="parking"
+          onCancel={() => setOpenedModalType(null)}
+          onSubmit={() => setOpenedModalType(null)}
+          onError={() => null}
+        />
       </Modal>
     </>
   )

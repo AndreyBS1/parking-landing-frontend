@@ -3,12 +3,14 @@ import {
   Group,
   Loader,
   Modal,
+  NumberInput,
   Pill,
   Select,
   Stack,
   Table,
   TextInput,
 } from '@mantine/core'
+import { DateInput } from '@mantine/dates'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { deletePantryPurchaseRequest } from '../api/delete-pantry-purchase-request'
@@ -32,6 +34,8 @@ const statusFilterData = [
 ]
 
 type TFilterOptions = {
+  date: Date | null
+  placeNumber: string | null
   status: string | null
 }
 
@@ -62,6 +66,8 @@ export default function PantryPurchaseRequestsPage() {
     })
 
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
+    date: null,
+    placeNumber: null,
     status: null,
   })
 
@@ -97,7 +103,20 @@ export default function PantryPurchaseRequestsPage() {
 
   const filteredData = data.filter((purchaseRequest) => {
     let isPurchaseRequestValid = true
-    const { status } = filterOptions
+    const { date, placeNumber, status } = filterOptions
+    if (date !== null) {
+      const selectedDateString = date.toDateString()
+      const requestCreatedDateString = new Date(purchaseRequest.createdAt).toDateString()
+      if (selectedDateString !== requestCreatedDateString) {
+        isPurchaseRequestValid = false
+      }
+    }
+    if (
+      placeNumber &&
+      !String(purchaseRequest.pantryPlace.displayedNo).startsWith(placeNumber)
+    ) {
+      isPurchaseRequestValid = false
+    }
     if (status && purchaseRequest.status !== Number(status)) {
       isPurchaseRequestValid = false
     }
@@ -106,7 +125,7 @@ export default function PantryPurchaseRequestsPage() {
 
   const handleFilterOptionChange = (
     option: keyof TFilterOptions,
-    value: string | null
+    value: Date | string | null
   ) => {
     setFilterOptions((prevFilterOptions) => ({
       ...prevFilterOptions,
@@ -134,6 +153,23 @@ export default function PantryPurchaseRequestsPage() {
   return (
     <>
       <Group mb="xl">
+        <DateInput
+          label="Дата"
+          placeholder="Выберите дату"
+          value={filterOptions.date}
+          valueFormat="DD.MM.YYYY"
+          clearable
+          onChange={(value) => handleFilterOptionChange('date', value)}
+        />
+        <NumberInput
+          label="Номер места"
+          placeholder="Введите номер"
+          value={filterOptions.placeNumber ?? ''}
+          min={1}
+          onChange={(value) =>
+            handleFilterOptionChange('placeNumber', value ? String(value) : null)
+          }
+        />
         <Select
           label="Статус"
           placeholder="Выберите статус"
@@ -148,6 +184,7 @@ export default function PantryPurchaseRequestsPage() {
           <Table.Th>Имя</Table.Th>
           <Table.Th>Телефон</Table.Th>
           <Table.Th>Почта</Table.Th>
+          <Table.Th>Номер к/м</Table.Th>
           <Table.Th>Статус</Table.Th>
           <Table.Th></Table.Th>
         </Table.Thead>
@@ -169,6 +206,7 @@ export default function PantryPurchaseRequestsPage() {
               <Table.Td>{purchaseRequest.customerName}</Table.Td>
               <Table.Td>{purchaseRequest.customerPhoneNumber}</Table.Td>
               <Table.Td>{purchaseRequest.customerEmail}</Table.Td>
+              <Table.Td>{purchaseRequest.pantryPlace.displayedNo}</Table.Td>
               <Table.Td>
                 <Pill color={PurchaseRequestStatusRecord[purchaseRequest.status].color}>
                   {PurchaseRequestStatusRecord[purchaseRequest.status].title}

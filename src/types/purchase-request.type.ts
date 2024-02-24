@@ -8,6 +8,6 @@ export interface IPurchaseRequest {
   customerPhoneNumber: string
   status: PurchaseRequestStatusesEnum
   parkingPlace: IParkingPlace
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
 }
