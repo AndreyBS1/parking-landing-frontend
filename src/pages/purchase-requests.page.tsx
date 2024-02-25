@@ -10,7 +10,6 @@ import {
   Table,
   TextInput,
 } from '@mantine/core'
-import { DateInput } from '@mantine/dates'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { deletePurchaseRequest } from '../api/delete-purchase-request'
@@ -27,15 +26,25 @@ enum ModalTypes {
   Delete,
 }
 
+enum DateFilterTypeEnum {
+  NewFirst,
+  OldFirst,
+}
+
+const dateFilterData = [
+  { label: 'Сначала новые', value: String(DateFilterTypeEnum.NewFirst) },
+  { label: 'Сначала старые', value: String(DateFilterTypeEnum.OldFirst) },
+]
+
 const statusFilterData = [
   // { label: 'В ожидании', value: String(PurchaseRequestStatusesEnum.Idle) },
-  { label: 'В обработке', value: String(PurchaseRequestStatusesEnum.InProcess) },
+  { label: 'Забронировано', value: String(PurchaseRequestStatusesEnum.InProcess) },
   { label: 'Продано', value: String(PurchaseRequestStatusesEnum.Approved) },
-  { label: 'Отклонена', value: String(PurchaseRequestStatusesEnum.Rejected) },
+  { label: 'Отклонено', value: String(PurchaseRequestStatusesEnum.Rejected) },
 ]
 
 type TFilterOptions = {
-  date: Date | null
+  date: string | null
   placeNumber: string | null
   status: string | null
 }
@@ -67,7 +76,7 @@ export default function PurchaseRequestsPage() {
     })
 
   const [filterOptions, setFilterOptions] = useState<TFilterOptions>({
-    date: null,
+    date: String(DateFilterTypeEnum.NewFirst),
     placeNumber: null,
     status: null,
   })
@@ -108,14 +117,7 @@ export default function PurchaseRequestsPage() {
 
   const filteredData = data.filter((purchaseRequest) => {
     let isPurchaseRequestValid = true
-    const { date, placeNumber, status } = filterOptions
-    if (date !== null) {
-      const selectedDateString = date.toDateString()
-      const requestCreatedDateString = new Date(purchaseRequest.createdAt).toDateString()
-      if (selectedDateString !== requestCreatedDateString) {
-        isPurchaseRequestValid = false
-      }
-    }
+    const { placeNumber, status } = filterOptions
     if (
       placeNumber &&
       !String(purchaseRequest.parkingPlace.displayedNo).startsWith(placeNumber)
@@ -128,9 +130,21 @@ export default function PurchaseRequestsPage() {
     return isPurchaseRequestValid
   })
 
+  filteredData.sort((requestA, requestB) => {
+    const createdTimestampA = new Date(requestA.createdAt).getTime()
+    const createdTimestampB = new Date(requestB.createdAt).getTime()
+    if (filterOptions.date === String(DateFilterTypeEnum.NewFirst)) {
+      return createdTimestampB - createdTimestampA
+    }
+    if (filterOptions.date === String(DateFilterTypeEnum.OldFirst)) {
+      return createdTimestampA - createdTimestampB
+    }
+    throw new Error('Unknown date filter type')
+  })
+
   const handleFilterOptionChange = (
     option: keyof TFilterOptions,
-    value: Date | string | null
+    value: string | null
   ) => {
     setFilterOptions((prevFilterOptions) => ({
       ...prevFilterOptions,
@@ -158,12 +172,13 @@ export default function PurchaseRequestsPage() {
   return (
     <>
       <Group mb="xl">
-        <DateInput
+        <Select
           label="Дата"
-          placeholder="Выберите дату"
+          placeholder="Выберите порядок"
+          data={dateFilterData}
           value={filterOptions.date}
-          valueFormat="DD.MM.YYYY"
-          clearable
+          defaultValue={dateFilterData[0].value}
+          allowDeselect={false}
           onChange={(value) => handleFilterOptionChange('date', value)}
         />
         <NumberInput
