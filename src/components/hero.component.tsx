@@ -26,10 +26,10 @@ export default function Hero() {
         >
           купить машино-место
         </Button>
-        <p className="text-white text-center uppercase text-lg">
+        <p className="font-semibold text-white text-center uppercase text-lg">
           Собственность сразу!
           <br />
-          Ключи 3 апреля
+          Ключи 3 апреля 2024 Г.
         </p>
       </div>
     </Section>
