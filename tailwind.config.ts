@@ -21,6 +21,8 @@ export default {
     extend: {
       backgroundImage: {
         hero: "url('/images/hero.jpeg')",
+        'about-us': "url('/images/about-us.jpg')",
+        'about-place': "url('/images/about-place.jpg')",
       },
     },
   },
