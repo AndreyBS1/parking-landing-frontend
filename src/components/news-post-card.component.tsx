@@ -11,7 +11,7 @@ export default function NewsPostCard(props: INewsPostCardProps) {
 
   const formattedDate = new Date(createdAt).toLocaleDateString('ru')
 
-  const imageSrc = `${BASE_API_URL}/image/${imagePath}`
+  const imageSrc = `${BASE_API_URL}/image?imageName=${imagePath}`
 
   return (
     <div className="bg-white text-black rounded-3xl pt-5 pb-9 px-5">
