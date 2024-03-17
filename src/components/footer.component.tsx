@@ -17,53 +17,57 @@ export default function Footer() {
     <>
       <footer
         id="contacts"
-        className="shrink-0 grow bg-additional text-white pt-14 pb-20 px-10 lg:pl-32 lg:pr-28 lg:flex justify-between items-end"
+        className="lg:min-h-screen bg-additional text-white pt-14 pb-20 px-10 lg:pl-32 lg:pr-28 flex flex-col justify-between gap-y-6 text-lg"
       >
-        <div className="mb-14 lg:mb-0 lg:text-xs">
-          <h2 className="mb-6 lg:mb-2 text-5xl lg:text-2xl font-bold">Контакты</h2>
-          <p className="mb-6 lg:mb-2">
+        <div className="flex flex-col justify-between gap-y-6">
+          <h2 className="text-5xl lg:text-4xl font-bold">Контакты</h2>
+          <p>
             Адрес: г. Санкт-Петербург, Комендантский
             <br />
             проспект, дом 66, корпус 2
           </p>
-          <p className="mb-6 lg:mb-2">
+          <p>
             Расписание работы/просмотров отдела продаж:
             <br />
             вторник и четверг с 17:00 до 19:30
             <br />
             Цены действуют до 10 марта 2024 года
           </p>
-          <p>Телефон:</p>
-          <Link
-            href="tel:+79117751111"
-            target="_blank"
-            rel="noreferrer"
-            className="mb-6 lg:mb-2 block"
-          >
-            +7 (911) 775-11-11
-          </Link>
-          <p>
-            Email:{' '}
+          <div>
+            <p>Телефон:</p>
             <Link
-              href="mailto:parking-chistoenebo@bk.ru"
+              href="tel:+79117751111"
               target="_blank"
               rel="noreferrer"
-              className="lowercase"
+              className="block w-max"
             >
-              parking-chistoenebo@bk.ru
+              +7 (911) 775-11-11
             </Link>
-          </p>
-          <p className="mb-6 lg:mb-2">
-            Доп. email:{' '}
-            <Link
-              href="mailto:9117751111@mail.ru"
-              target="_blank"
-              rel="noreferrer"
-              className="lowercase"
-            >
-              9117751111@mail.ru
-            </Link>
-          </p>
+          </div>
+          <div>
+            <p>
+              Email:{' '}
+              <Link
+                href="mailto:parking-chistoenebo@bk.ru"
+                target="_blank"
+                rel="noreferrer"
+                className="lowercase"
+              >
+                parking-chistoenebo@bk.ru
+              </Link>
+            </p>
+            <p>
+              Доп. email:{' '}
+              <Link
+                href="mailto:9117751111@mail.ru"
+                target="_blank"
+                rel="noreferrer"
+                className="lowercase"
+              >
+                9117751111@mail.ru
+              </Link>
+            </p>
+          </div>
           <p className="mb-8 lg:mb-4">
             Запишитесь на бесплатную консультацию{' '}
             <button
@@ -73,6 +77,8 @@ export default function Footer() {
               тут
             </button>
           </p>
+        </div>
+        <div className="flex justify-between gap-x-6">
           <div className="flex gap-x-3">
             <a
               href="https://wa.me/79117751111"
@@ -99,8 +105,6 @@ export default function Footer() {
               />
             </a>
           </div>
-        </div>
-        <div>
           <img src="/images/logo.png" alt="" className="w-[2.65rem]" />
         </div>
       </footer>

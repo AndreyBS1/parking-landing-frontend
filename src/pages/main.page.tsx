@@ -1,6 +1,8 @@
 import { useMediaQuery } from '@mantine/hooks'
 import { Mousewheel } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import AboutPlace from '../components/about-place.component'
+import AboutUs from '../components/about-us.component'
 import Footer from '../components/footer.component'
 import GeoPosition from '../components/geo-position.component'
 import Header from '../components/header.component'
@@ -8,8 +10,6 @@ import Hero from '../components/hero.component'
 import ParkingPlan from '../components/parking-plan.component'
 import PhotoGallery from '../components/photo-gallery.component'
 import ScrollControls from '../components/scroll-controls.component'
-import AboutUs from '../components/about-us.component'
-import AboutPlace from '../components/about-place.component'
 import NewsProject from '../components/news-project.component'
 
 export default function MainPage() {
@@ -45,10 +45,10 @@ export default function MainPage() {
             <NewsProject />
           </SwiperSlide>
           <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
-            <div className="h-full flex flex-col">
-              <PhotoGallery />
-              <Footer />
-            </div>
+            <PhotoGallery />
+          </SwiperSlide>
+          <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
+            <Footer />
           </SwiperSlide>
           <ScrollControls />
         </Swiper>
