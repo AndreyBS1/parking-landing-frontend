@@ -16,4 +16,5 @@ export const AdminLinks = [
     href: '/admin/dashboard/pantry-purchase-requests',
   },
   { title: 'Заявки на звонок', href: '/admin/dashboard/call-requests' },
+  { title: 'Новости', href: '/admin/dashboard/news-posts' },
 ]

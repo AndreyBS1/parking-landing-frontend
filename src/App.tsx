@@ -3,6 +3,7 @@ import AuthPage from './pages/auth.page'
 import CallRequestsPage from './pages/call-requests.page'
 import DashboardPage from './pages/dashboard.page'
 import MainPage from './pages/main.page'
+import NewsPostsPage from './pages/news-posts.page'
 import PantryPlacesPage from './pages/pantry-places.page'
 import PantryPurchaseRequestsPage from './pages/pantry-purchase-requests.page'
 import ParkingPlacesPage from './pages/parking-places.page'
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
           {
             path: 'call-requests',
             element: <CallRequestsPage />,
+          },
+          {
+            path: 'news-posts',
+            element: <NewsPostsPage />,
           },
           // {
           //   path: '*',

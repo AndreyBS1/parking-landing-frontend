@@ -11,6 +11,9 @@ dependencies:
   '@mantine/core':
     specifier: ^7.3.2
     version: 7.3.2(@mantine/hooks@7.3.2)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)
+  '@mantine/dates':
+    specifier: ^7.6.2
+    version: 7.6.2(@mantine/core@7.3.2)(@mantine/hooks@7.3.2)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/hooks':
     specifier: ^7.3.2
     version: 7.3.2(react@18.2.0)
@@ -704,6 +707,23 @@ packages:
       - '@types/react'
     dev: false
 
+  /@mantine/dates@7.6.2(@mantine/core@7.3.2)(@mantine/hooks@7.3.2)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-0J7V06HSl0pYgCW4xqj02gilrGvCL9pTDENGCn+RruSfafJrWDB43C1/q5FFNOvj3pNGDMepCQbB2IM7nlucTw==}
+    peerDependencies:
+      '@mantine/core': 7.6.2
+      '@mantine/hooks': 7.6.2
+      dayjs: '>=1.0.0'
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
+      '@mantine/core': 7.3.2(@mantine/hooks@7.3.2)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)
+      '@mantine/hooks': 7.3.2(react@18.2.0)
+      clsx: 2.1.0
+      dayjs: 1.11.10
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@mantine/hooks@7.3.2(react@18.2.0):
     resolution: {integrity: sha512-xgumuuI3PBWXff5N02HCI7PEy25mDEdyXDQklUYK93J6FKwpcosyZnGVitoUrV1gLtYYa9ZudeAWdhHuh/CpOg==}
     peerDependencies:
@@ -1299,6 +1319,11 @@ packages:
 
   /clsx@2.0.0:
     resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
+    engines: {node: '>=6'}
+    dev: false
+
+  /clsx@2.1.0:
+    resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
     engines: {node: '>=6'}
     dev: false
 
