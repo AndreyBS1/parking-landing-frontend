@@ -10,6 +10,7 @@ import Hero from '../components/hero.component'
 import ParkingPlan from '../components/parking-plan.component'
 import PhotoGallery from '../components/photo-gallery.component'
 import ScrollControls from '../components/scroll-controls.component'
+import NewsProject from '../components/news-project.component'
 
 export default function MainPage() {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
@@ -41,6 +42,9 @@ export default function MainPage() {
             <GeoPosition />
           </SwiperSlide>
           <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
+            <NewsProject />
+          </SwiperSlide>
+          <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
             <PhotoGallery />
           </SwiperSlide>
           <SwiperSlide style={{ width: '100vw', height: '100vh' }}>
@@ -59,6 +63,7 @@ export default function MainPage() {
           <AboutPlace />
           <GeoPosition />
           <PhotoGallery />
+          <NewsProject />
           <Footer />
         </>
       ) : null}
