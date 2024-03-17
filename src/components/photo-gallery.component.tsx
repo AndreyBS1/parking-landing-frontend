@@ -103,7 +103,7 @@ export default function PhotoGallery() {
               >
                 <img
                   src="/icons/up-arrow.svg"
-                  alt="Close"
+                  alt="Previous news post"
                   className="w-9 h-9 -rotate-90"
                 />
               </button>
@@ -118,7 +118,7 @@ export default function PhotoGallery() {
               >
                 <img
                   src="/icons/up-arrow.svg"
-                  alt="Close"
+                  alt="Next news post"
                   className="w-9 h-9 rotate-90"
                 />
               </button>

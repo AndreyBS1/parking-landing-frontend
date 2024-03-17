@@ -1,3 +1,4 @@
+import '@mantine/carousel/styles.css'
 import { MantineProvider } from '@mantine/core'
 import { DatesProvider } from '@mantine/dates'
 import '@mantine/dates/styles.css'

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
+    "@mantine/carousel": "^7.6.2",
     "@mantine/core": "^7.3.2",
     "@mantine/dates": "^7.6.2",
     "@mantine/hooks": "^7.3.2",
@@ -19,6 +20,7 @@
     "axios": "^1.6.2",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.10",
+    "embla-carousel-react": "^7.1.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "react": "^18.2.0",
