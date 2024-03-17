@@ -20,23 +20,23 @@ export default function AboutPlace() {
   return (
     <Section className="bg-about-place text-white bg-cover bg-center py-32 lg:py-0 px-5 lg:px-[8.1rem] flex flex-col sm:flex-col md:flex-row md:justify-between items-center">
       <div className="mb-12 lg:mb-0 lg:text-xl md:w-5/12 sm:w-full">
-        <h2 className="mb-16 lg:mb-20 text-5xl lg:text-4xl font-bold">
+        <h2 className="mb-16 lg:mb-12 text-5xl lg:text-4xl font-bold">
           ЖК “Чистое Небо”
         </h2>
-        <p className="mb-6 lg:mb-10">
+        <p className="mb-6 lg:mb-4">
           Проект в ЖК “Чистое Небо” будет реализован следующим образом:
         </p>
-        <p className="mb-6 lg:mb-10">
+        <p className="mb-6 lg:mb-4">
           ⁃ На цокольном и первом этажах здания располагаются нежилые помещения, которые
           будут функционировать в формате торгового центра. Супермаркет “Перекресток”
           занимает помещение на цокольном этаже.
         </p>
-        <p className="mb-6 lg:mb-10">
+        <p className="mb-6 lg:mb-4">
           ⁃ На этажах со второго по шестой располагаются паркинг и кладовые. Уже сейчас Вы
           можете забронировать и приобрести в собственность машино-место или кладовую по
           сниженной цене, передача ключей - до 3 апреля 2024 года.
         </p>
-        <p className="mb-16 lg:mb-20">
+        <p className="mb-16 lg:mb-12">
           В данный момент на объекте ведутся строительно-монтажные работы по
           переустройству цокольного и первого этажей.
           <br />

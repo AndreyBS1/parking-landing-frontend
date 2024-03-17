@@ -46,6 +46,22 @@ export default function NewsProject() {
     )
   }
 
+  if (posts.length === 0) {
+    return (
+      <Section className="bg-about-place px-5 lg:px-[8.1rem] flex flex-col justify-center">
+        <h2 className="text-white mb-3 lg:mb-7 text-5xl lg:text-4xl py-[1.5rem] font-bold">
+          Новости проекта
+        </h2>
+        <div className="flex-1 flex flex-col justify-center items-center">
+          <div className="px-16 py-10 rounded-3xl bg-white">
+            <p className="text-2xl">Похоже, новостей пока нет</p>
+            <p className="text-lg">Они скоро появятся, поэтому попробуйте зайти позже</p>
+          </div>
+        </div>
+      </Section>
+    )
+  }
+
   return (
     <Section className="relative bg-about-place md:bg-center text-white bg-cover lg:bg-center pb-32 lg:pb-0 px-5 lg:px-[8.1rem] flex flex-col justify-center">
       <h2 className="mb-3 lg:mb-7 text-5xl lg:text-4xl py-[1.5rem] font-bold">
