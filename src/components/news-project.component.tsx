@@ -62,6 +62,13 @@ export default function NewsProject() {
     )
   }
 
+  const sortedPosts = [...posts]
+  sortedPosts.sort((postA, postB) => {
+    const createdTimestampA = new Date(postA.createdAt).getTime()
+    const createdTimestampB = new Date(postB.createdAt).getTime()
+    return createdTimestampB - createdTimestampA
+  })
+
   return (
     <Section className="relative bg-about-place md:bg-center text-white bg-cover lg:bg-center pb-32 lg:pb-0 px-5 lg:px-[8.1rem] flex flex-col justify-center">
       <h2 className="mb-3 lg:mb-7 text-5xl lg:text-4xl py-[1.5rem] font-bold">
@@ -91,7 +98,7 @@ export default function NewsProject() {
             'w-14 h-14 bg-white data-[inactive]:opacity-0 data-[inactive]:cursor-default',
         }}
       >
-        {posts.map((post) => (
+        {sortedPosts.map((post) => (
           <Carousel.Slide>
             <NewsPostCard key={post.id} post={post} />
           </Carousel.Slide>
