@@ -1,7 +1,7 @@
 import { Modal } from '@mantine/core'
 import { useState } from 'react'
-import ContactForm from './contact-form.component'
 import Button from '../shared-ui/button.component'
+import ContactForm from './contact-form.component'
 import Section from './section.component'
 
 enum ModalTypes {
@@ -13,25 +13,25 @@ enum ModalTypes {
 export default function AboutUs() {
   const [openedModalType, setOpenedModalType] = useState<ModalTypes | null>(null)
 
-
   return (
-    <Section className="bg-aboutUs md:bg-left text-white bg-cover lg:bg-center px-5 lg:px-[8.1rem] flex flex-col justify-center">
+    <Section className="bg-about-us md:bg-left text-white bg-cover lg:bg-center px-5 lg:px-[8.1rem] flex flex-col justify-center">
       <div className="mb-12 lg:mb-0 lg:text-xl bg-cover">
-        <h2 className="mb-10 lg:mb-14 text-5xl lg:text-4xl font-bold">О нас</h2>
-        <p className="mb-6 lg:mb-10 lg:w-2/5 md:w-3/5 sm:w-full">
-          Мы - группа компаний, занимающаяся редевелопментом (переустройством) отдельностоящих нежилых
-          зданий по г. Санкт-Петербургу и Ленинградской области.  Наша команда активно работает 2015
-          года и имеет на счету уже более 15 реализованных проектов. Своими действиями мы предоставляем
-          новые возможности как для жильцов, так и для бизнеса. За столько то лет мы помогли стольким то
-          арендаторам найти помещение для своего бизнеса, стольким то инвесторам получить возможность иметь
-          пассивный доход и стольким-то жильцам приобрести парковочные и кладовые места в собственность.
+        <h2 className="mb-10 lg:mb-16 text-5xl lg:text-4xl font-bold">О нас</h2>
+        <p className="mb-10 lg:mb-16 lg:w-2/5 md:w-3/5 sm:w-full">
+          Мы - группа компаний, занимающаяся редевелопментом (переустройством)
+          отдельностоящих нежилых зданий по г. Санкт-Петербургу и Ленинградской области.
+          Наша команда активно работает 2015 года и имеет на счету уже более 15
+          реализованных проектов.Своими действиями мы предоставляем новые возможности как
+          для жильцов, так и для бизнеса. За столько то лет мы помогли стольким то
+          арендаторам найти помещение для своего бизнеса, стольким то инвесторам получить
+          возможность иметь пассивный доход и стольким-то жильцам приобрести парковочные и
+          кладовые места в собственность.
         </p>
       </div>
 
-
-      <div className="flex flex-col justify-center items-start">
+      <div>
         <Button
-          className="mb-5 py-4 px-12 lg:text-xl uppercase shadow-md"
+          className="py-4 px-12 lg:text-xl uppercase shadow-md"
           onClick={() => setOpenedModalType(ModalTypes.Form)}
         >
           Связаться с нами
@@ -58,9 +58,6 @@ export default function AboutUs() {
           onError={() => setOpenedModalType(ModalTypes.Error)}
         />
       </Modal>
-
     </Section>
-
-
   )
 }
