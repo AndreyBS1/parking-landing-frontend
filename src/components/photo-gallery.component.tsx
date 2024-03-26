@@ -84,7 +84,7 @@ export default function PhotoGallery() {
       </div>
 
       {selectedPhotoIndex !== null && (
-        <div className="fixed inset-0 px-72 flex items-center">
+        <div className="fixed inset-0 z-50 px-72 flex items-center">
           <div
             className="absolute inset-0 bg-black-transparent-70"
             onClick={() => setSelectedPhotoIndex(null)}
