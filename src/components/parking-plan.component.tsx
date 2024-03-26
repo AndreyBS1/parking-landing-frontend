@@ -274,7 +274,7 @@ export default function ParkingPlan() {
               <p>{selectedFloorInfo.deadline}</p>
             </div>
             <div className="mb-3 flex justify-between items-center">
-              <p>МЕСТ В ПРОДАЖЕ:</p>
+              <p>МЕСТ НА ЭТАЖЕ:</p>
               <p>{selectedFloorInfo.placesAmount}</p>
             </div>
             <div className="h-[2px] my-5 bg-black" />
