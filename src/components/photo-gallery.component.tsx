@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mantine/hooks'
 import clsx from 'clsx'
 import { useState } from 'react'
 import ImageViewer from './image-viewer.component'
@@ -19,6 +20,8 @@ const Photos = [
 ]
 
 export default function PhotoGallery() {
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
+
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null)
 
   const selectedPhoto =
@@ -66,20 +69,32 @@ export default function PhotoGallery() {
         {Photos.map((photo, index) => (
           <>
             {photo ? (
-              <button
-                className={clsx(
-                  'cursor-pointer',
-                  index === 1 && 'lg:col-start-2 lg:col-end-4 lg:row-start-1 lg:row-end-3'
+              <>
+                {isDesktop ? (
+                  <button
+                    key={index}
+                    className={clsx(
+                      'cursor-pointer',
+                      index === 1 &&
+                        'lg:col-start-2 lg:col-end-4 lg:row-start-1 lg:row-end-3'
+                    )}
+                    onClick={() => setSelectedPhotoIndex(index)}
+                  >
+                    <img
+                      src={photo}
+                      className="w-full object-cover object-center"
+                      alt=""
+                    />
+                  </button>
+                ) : (
+                  <img
+                    key={index}
+                    src={photo}
+                    className="w-full object-cover object-center"
+                    alt=""
+                  />
                 )}
-                onClick={() => setSelectedPhotoIndex(index)}
-              >
-                <img
-                  key={index}
-                  src={photo}
-                  className="w-full object-cover object-center"
-                  alt=""
-                />
-              </button>
+              </>
             ) : (
               <div />
             )}
