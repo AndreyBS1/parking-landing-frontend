@@ -29,7 +29,7 @@ export default function Hero() {
         <p className="font-semibold text-white text-center uppercase text-lg">
           Собственность сразу!
           <br />
-          Ключи 3 апреля 2024 Г.
+          Ключи 8 апреля 2024 Г.
         </p>
       </div>
     </Section>
