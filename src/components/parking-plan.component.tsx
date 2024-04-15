@@ -165,7 +165,7 @@ export default function ParkingPlan() {
                 ))}
               </div>
               <p className="text-3xl mb-6">{selectedFloorInfo.title}</p>
-              <div className="mb-3 flex justify-between items-center">
+              {/* <div className="mb-3 flex justify-between items-center">
                 <p>ТИП:</p>
                 <p>{selectedFloorInfo.type}</p>
               </div>
@@ -176,7 +176,7 @@ export default function ParkingPlan() {
               <div className="mb-3 flex justify-between items-center">
                 <p>МЕСТ НА ЭТАЖЕ:</p>
                 <p>{selectedFloorInfo.placesAmount}</p>
-              </div>
+              </div> */}
               <div className="h-[2px] my-5 bg-black" />
               <p className="mb-6 text-3xl">Статус</p>
               {ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
