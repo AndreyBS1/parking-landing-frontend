@@ -27,7 +27,7 @@ export default function Hero() {
           купить машино-место
         </Button>
         <p className="font-semibold text-white text-center uppercase text-lg">
-          Собственность сразу!
+          Ключи и собственность сразу!
         </p>
         <p className="font-semibold text-white text-center uppercase text-lg bg-red/75 px-2 rounded-full">
           Паркинг открыт
