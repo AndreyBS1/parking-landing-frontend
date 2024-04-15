@@ -28,8 +28,9 @@ export default function Hero() {
         </Button>
         <p className="font-semibold text-white text-center uppercase text-lg">
           Собственность сразу!
-          <br />
-          Ключи 8 апреля 2024 Г.
+        </p>
+        <p className="font-semibold text-white text-center uppercase text-lg bg-red/75 px-2 rounded-full">
+          Паркинг открыт
         </p>
       </div>
     </Section>
