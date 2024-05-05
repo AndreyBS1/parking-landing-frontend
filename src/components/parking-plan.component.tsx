@@ -127,25 +127,37 @@ export default function ParkingPlan() {
       {isDesktop ? (
         <Section className="px-[8.05rem] flex justify-center items-center">
           <div className="flex justify-center items-end gap-x-[7.25rem]">
-            <div className="relative">
-              <img src={parkingPlanImage} alt="" className="w-[53.3rem]" />
-              {floorParkingPlaces.map((parkingPlace) => (
-                <ParkingPlace
-                  key={parkingPlace.id}
-                  parkingPlace={parkingPlace}
-                  className="absolute"
-                  onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
-                />
-              ))}
-              {floorPantryPlaces.map((pantryPlace) => (
-                <PantryPlace
-                  key={pantryPlace.id}
-                  pantryPlace={pantryPlace}
-                  className="absolute"
-                  onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
-                />
-              ))}
-            </div>
+            {selectedFloor === 3 || selectedFloor === 4 ? (
+              <img
+                src={
+                  selectedFloor === 3
+                    ? '/images/plans/fourth-floor-plan-placeholder.png'
+                    : '/images/plans/fifth-floor-plan-placeholder.png'
+                }
+                alt=""
+                className="w-[53.3rem]"
+              />
+            ) : (
+              <div className="relative">
+                <img src={parkingPlanImage} alt="" className="w-[53.3rem]" />
+                {floorParkingPlaces.map((parkingPlace) => (
+                  <ParkingPlace
+                    key={parkingPlace.id}
+                    parkingPlace={parkingPlace}
+                    className="absolute"
+                    onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
+                  />
+                ))}
+                {floorPantryPlaces.map((pantryPlace) => (
+                  <PantryPlace
+                    key={pantryPlace.id}
+                    pantryPlace={pantryPlace}
+                    className="absolute"
+                    onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
+                  />
+                ))}
+              </div>
+            )}
             <div className="w-fit">
               <div className="mb-[1.05rem] flex gap-x-[1.4rem]">
                 {FloorRecordEntries.map(([floor]) => (
@@ -165,42 +177,40 @@ export default function ParkingPlan() {
                 ))}
               </div>
               <p className="text-3xl mb-6">{selectedFloorInfo.title}</p>
-              {/* <div className="mb-3 flex justify-between items-center">
-                <p>ТИП:</p>
-                <p>{selectedFloorInfo.type}</p>
-              </div>
-              <div className="mb-3 flex justify-between items-center">
-                <p>СРОК ПЕРЕДАЧИ:</p>
-                <p>{selectedFloorInfo.deadline}</p>
-              </div>
-              <div className="mb-3 flex justify-between items-center">
-                <p>МЕСТ НА ЭТАЖЕ:</p>
-                <p>{selectedFloorInfo.placesAmount}</p>
-              </div> */}
               <div className="h-[2px] my-5 bg-black" />
               <p className="mb-6 text-3xl">Статус</p>
-              {ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
-                <div
-                  key={placeStatusMarking.title}
-                  className="mb-4 flex items-center gap-x-5"
-                >
+              {selectedFloor === 3 || selectedFloor === 4 ? (
+                <p className="h-52 mb-4">
+                  В данный момент на этаже ведутся работы по переустройству машино-мест в
+                  кладовые помещения. Для предзаказа и получения дополнительной информации
+                  звоните по телефону:
+                </p>
+              ) : (
+                ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
                   <div
-                    className="h-[1.80rem] w-[1.80rem] rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: placeStatusMarking.color }}
+                    key={placeStatusMarking.title}
+                    className="mb-4 flex items-center gap-x-5"
                   >
-                    {placeStatusMarking.iconText ? (
-                      <p className="text-xs text-white">{placeStatusMarking.iconText}</p>
-                    ) : (
-                      <img
-                        src={placeStatusMarking.icon}
-                        alt={placeStatusMarking.title}
-                        className="w-[1.075rem]"
-                      />
-                    )}
+                    <div
+                      className="h-[1.80rem] w-[1.80rem] rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: placeStatusMarking.color }}
+                    >
+                      {placeStatusMarking.iconText ? (
+                        <p className="text-xs text-white">
+                          {placeStatusMarking.iconText}
+                        </p>
+                      ) : (
+                        <img
+                          src={placeStatusMarking.icon}
+                          alt={placeStatusMarking.title}
+                          className="w-[1.075rem]"
+                        />
+                      )}
+                    </div>
+                    <p>{placeStatusMarking.title}</p>
                   </div>
-                  <p>{placeStatusMarking.title}</p>
-                </div>
-              ))}
+                ))
+              )}
               <div className="h-[2px] mt-10 mb-4 bg-black" />
               <div className="flex justify-between items-center gap-x-5">
                 <Link
@@ -265,42 +275,38 @@ export default function ParkingPlan() {
               ))}
             </div>
             <p className="text-3xl mb-6">{selectedFloorInfo.title}</p>
-            {/* <div className="mb-3 flex justify-between items-center">
-              <p>ТИП:</p>
-              <p>{selectedFloorInfo.type}</p>
-            </div>
-            <div className="mb-3 flex justify-between items-center">
-              <p>СРОК ПЕРЕДАЧИ:</p>
-              <p>{selectedFloorInfo.deadline}</p>
-            </div>
-            <div className="mb-3 flex justify-between items-center">
-              <p>МЕСТ НА ЭТАЖЕ:</p>
-              <p>{selectedFloorInfo.placesAmount}</p>
-            </div> */}
             <div className="h-[2px] my-5 bg-black" />
             <p className="mb-6 text-3xl">Статус</p>
-            {ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
-              <div
-                key={placeStatusMarking.title}
-                className="mb-4 flex items-center gap-x-5"
-              >
+            {selectedFloor === 3 || selectedFloor === 4 ? (
+              <p className="mb-4 h-52">
+                В данный момент на этаже ведутся работы по переустройству машино-мест в
+                кладовые помещения. Для предзаказа и получения дополнительной информации
+                звоните по телефону:
+              </p>
+            ) : (
+              ParkingPlaceStatusMarkings.map((placeStatusMarking) => (
                 <div
-                  className="h-[1.80rem] w-[1.80rem] rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: placeStatusMarking.color }}
+                  key={placeStatusMarking.title}
+                  className="mb-4 flex items-center gap-x-5"
                 >
-                  {placeStatusMarking.iconText ? (
-                    <p className="text-xs text-white">{placeStatusMarking.iconText}</p>
-                  ) : (
-                    <img
-                      src={placeStatusMarking.icon}
-                      alt={placeStatusMarking.title}
-                      className="w-[1.075rem]"
-                    />
-                  )}
+                  <div
+                    className="h-[1.80rem] w-[1.80rem] rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: placeStatusMarking.color }}
+                  >
+                    {placeStatusMarking.iconText ? (
+                      <p className="text-xs text-white">{placeStatusMarking.iconText}</p>
+                    ) : (
+                      <img
+                        src={placeStatusMarking.icon}
+                        alt={placeStatusMarking.title}
+                        className="w-[1.075rem]"
+                      />
+                    )}
+                  </div>
+                  <p>{placeStatusMarking.title}</p>
                 </div>
-                <p>{placeStatusMarking.title}</p>
-              </div>
-            ))}
+              ))
+            )}
             <div className="h-[2px] mt-10 mb-4 bg-black" />
             <Link
               href="tel:+79117751111"
@@ -311,40 +317,54 @@ export default function ParkingPlan() {
               +7 (911) 775-11-11
             </Link>
           </div>
-          <div className="overflow-auto relative">
+          {selectedFloor === 3 || selectedFloor === 4 ? (
             <img
-              src={parkingPlanImage}
+              src={
+                selectedFloor === 3
+                  ? '/images/plans/fourth-floor-plan-placeholder.png'
+                  : '/images/plans/fifth-floor-plan-placeholder.png'
+              }
               alt=""
-              className="max-w-none"
-              style={{ width: `${zoom * 53}rem` }}
+              className="w-full"
             />
-            {floorParkingPlaces.map((parkingPlace) => (
-              <ParkingPlace
-                key={parkingPlace.id}
-                parkingPlace={parkingPlace}
-                zoom={zoom}
-                className="absolute"
-                onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
-              />
-            ))}
-            {floorPantryPlaces.map((pantryPlace) => (
-              <PantryPlace
-                key={pantryPlace.id}
-                pantryPlace={pantryPlace}
-                zoom={zoom}
-                className="absolute"
-                onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
-              />
-            ))}
-          </div>
-          <div className="mt-6 flex justify-center items-center gap-x-6">
-            <Button className="w-8 text-xl" onClick={handleZoomDecrease}>
-              -
-            </Button>
-            <Button className="w-8 text-xl" onClick={handleZoomIncrease}>
-              +
-            </Button>
-          </div>
+          ) : (
+            <>
+              <div className="overflow-auto relative">
+                <img
+                  src={parkingPlanImage}
+                  alt=""
+                  className="max-w-none"
+                  style={{ width: `${zoom * 53}rem` }}
+                />
+                {floorParkingPlaces.map((parkingPlace) => (
+                  <ParkingPlace
+                    key={parkingPlace.id}
+                    parkingPlace={parkingPlace}
+                    zoom={zoom}
+                    className="absolute"
+                    onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
+                  />
+                ))}
+                {floorPantryPlaces.map((pantryPlace) => (
+                  <PantryPlace
+                    key={pantryPlace.id}
+                    pantryPlace={pantryPlace}
+                    zoom={zoom}
+                    className="absolute"
+                    onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
+                  />
+                ))}
+              </div>
+              <div className="mt-6 flex justify-center items-center gap-x-6">
+                <Button className="w-8 text-xl" onClick={handleZoomDecrease}>
+                  -
+                </Button>
+                <Button className="w-8 text-xl" onClick={handleZoomIncrease}>
+                  +
+                </Button>
+              </div>
+            </>
+          )}
         </Section>
       ) : null}
 
