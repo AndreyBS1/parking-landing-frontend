@@ -17,21 +17,15 @@ export default function Hero() {
   }
 
   return (
-    <Section className="bg-hero bg-cover bg-center pt-[16.95rem] px-5 lg:px-[8.1rem]">
-      <img src="/images/hero-logo.png" alt="" className="w-full lg:w-[53.95rem] mb-28" />
-      <div className="flex flex-col justify-center items-center">
+    <Section className="relative bg-hero bg-cover bg-left lg:bg-center flex items-center px-5 lg:px-[8.1rem]">
+      <img src="/images/hero-logo.png" alt="" className="w-full lg:w-[53.95rem]" />
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2">
         <Button
-          className="mb-5 py-4 px-12 lg:text-xl uppercase shadow-md"
+          className="py-4 px-12 lg:text-xl uppercase shadow-md w-max"
           onClick={handleButtonClick}
         >
-          купить машино-место
+          Купить машино-место
         </Button>
-        <p className="font-semibold text-white text-center uppercase text-lg">
-          Ключи и собственность сразу!
-        </p>
-        <p className="font-semibold text-white text-center uppercase text-lg bg-red/75 px-2 rounded-full">
-          Паркинг открыт
-        </p>
       </div>
     </Section>
   )

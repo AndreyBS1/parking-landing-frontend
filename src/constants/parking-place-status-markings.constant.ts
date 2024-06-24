@@ -27,6 +27,12 @@ export const ParkingPlaceStatusMarkings: IParkingPlaceStatusMarking[] = [
   },
   {
     color: '#6C6C6C',
+    title: 'Лифт',
+    icon: '/icons/elevator-icon.png',
+    iconText: '',
+  },
+  {
+    color: '#6C6C6C',
     title: 'Акция',
     icon: '/icons/discount-icon.svg',
     iconText: '',

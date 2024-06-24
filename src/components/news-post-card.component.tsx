@@ -14,7 +14,7 @@ export default function NewsPostCard(props: INewsPostCardProps) {
   const imageSrc = `${BASE_API_URL}/image?imageName=${imagePath}`
 
   return (
-    <div className="bg-white text-black rounded-3xl pt-5 pb-9 px-5">
+    <div className="bg-white text-black rounded-3xl pt-5 pb-9 px-5 h-[37rem]">
       <h2 className="mb-2 text-2xl font-bold">{title}</h2>
       <p className="mb-4 text-gray text-sm font-bold">{formattedDate}</p>
       <img

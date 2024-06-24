@@ -6,6 +6,7 @@ import { PantryPlacePositionsRecord } from '../constants/pantry-place-positions-
 import { PlaceStatusesEnum } from '../enums/place-statuses.enum'
 import Button from '../shared-ui/button.component'
 import { IPantryPlace } from '../types/pantry-place.type'
+import { Icon } from './icon/icon.component'
 
 interface IPantryPlaceProps
   extends Omit<React.ComponentPropsWithoutRef<'div'>, 'children' | 'onSelect'> {
@@ -17,8 +18,14 @@ interface IPantryPlaceProps
 export default function PantryPlace(props: IPantryPlaceProps) {
   const { pantryPlace, zoom = 1, onSelect, className, style, ...otherProps } = props
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  if (!(pantryPlace.displayedNo in PantryPlacePositionsRecord)) {
+    return null
+  }
+
   const position = PantryPlacePositionsRecord[pantryPlace.displayedNo]
-  const image = PantryPlaceImagesRecord[position.imageType][pantryPlace.status]
+  const image = PantryPlaceImagesRecord[position.imageType]
   const imageSize = PantryPlaceImageSizeRecord[position.imageType]
 
   return (
@@ -48,7 +55,14 @@ export default function PantryPlace(props: IPantryPlaceProps) {
           }}
           {...otherProps}
         >
-          <img src={image} alt="" />
+          <Icon
+            name={image}
+            color={clsx(
+              pantryPlace.status === PlaceStatusesEnum.Free && '#5ABA00',
+              pantryPlace.status === PlaceStatusesEnum.Booked && '#F9B004',
+              pantryPlace.status === PlaceStatusesEnum.Sold && '#D63810'
+            )}
+          />
         </div>
       </HoverCard.Target>
       <HoverCard.Dropdown>

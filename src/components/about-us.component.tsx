@@ -28,7 +28,7 @@ export default function AboutUs() {
         </p>
       </div>
 
-      <div>
+      <div className="flex justify-center lg:block">
         <Button
           className="py-4 px-12 lg:text-xl uppercase shadow-md"
           onClick={() => setOpenedModalType(ModalTypes.Form)}

@@ -5,18 +5,18 @@ import ImageViewer from './image-viewer.component'
 import Section from './section.component'
 
 const Photos = [
-  '/images/photos/photo-1.jpeg',
-  '/images/photos/photo-2.jpeg',
-  '/images/photos/photo-3.jpeg',
-  '/images/photos/photo-4.jpeg',
-  '/images/photos/photo-5.jpeg',
-  '/images/photos/photo-6.jpeg',
+  '/images/photos/photo-1.jpg',
+  '/images/photos/photo-2.jpg',
+  '/images/photos/photo-3.jpg',
+  '/images/photos/photo-4.jpg',
+  '/images/photos/photo-5.jpg',
+  '/images/photos/photo-6.jpg',
   null,
   null,
-  '/images/photos/photo-7.jpeg',
-  '/images/photos/photo-8.jpeg',
-  '/images/photos/photo-9.jpeg',
-  '/images/photos/photo-10.jpeg',
+  '/images/photos/photo-7.jpg',
+  '/images/photos/photo-8.jpg',
+  '/images/photos/photo-9.jpg',
+  '/images/photos/photo-10.jpg',
 ]
 
 export default function PhotoGallery() {

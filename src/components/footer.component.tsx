@@ -22,14 +22,9 @@ export default function Footer() {
         <div className="flex flex-col justify-between gap-y-6">
           <h2 className="text-5xl lg:text-4xl font-bold">Контакты</h2>
           <p>
-            Адрес: г. Санкт-Петербург, Комендантский
+            Адрес: г. Санкт-Петербург, Комендантский проспект,
             <br />
-            проспект, дом 66, корпус 2
-          </p>
-          <p>
-            Расписание работы/просмотров отдела продаж:
-            <br />
-            вторник и четверг с 17:00 до 19:30
+            дом 66, корпус 2
           </p>
           <div>
             <p>Телефон:</p>
@@ -46,17 +41,6 @@ export default function Footer() {
             <p>
               Email:{' '}
               <Link
-                href="mailto:parking-chistoenebo@bk.ru"
-                target="_blank"
-                rel="noreferrer"
-                className="lowercase"
-              >
-                parking-chistoenebo@bk.ru
-              </Link>
-            </p>
-            <p>
-              Доп. email:{' '}
-              <Link
                 href="mailto:9117751111@mail.ru"
                 target="_blank"
                 rel="noreferrer"
@@ -66,44 +50,48 @@ export default function Footer() {
               </Link>
             </p>
           </div>
-          <p className="mb-8 lg:mb-4">
-            Запишитесь на бесплатную консультацию{' '}
-            <button
-              className="bg-none border-none underline underline-offset-2 hover:text-primary transition-colors"
-              onClick={() => setOpenedModalType(ModalTypes.Form)}
-            >
-              тут
-            </button>
-          </p>
         </div>
-        <div className="flex justify-between gap-x-6">
-          <div className="flex gap-x-3">
-            <a
-              href="https://wa.me/79117751111"
-              target="_blank"
-              rel="noreferrer"
-              className="block cursor-pointer"
-            >
-              <img
-                src="/icons/whatsapp-white-icon.svg"
-                alt="Whats App"
-                className="h-10 w-10"
-              />
-            </a>
-            <a
-              href="https://t.me/+79117751111"
-              target="_blank"
-              rel="noreferrer"
-              className="block cursor-pointer"
-            >
-              <img
-                src="/icons/telegram-white-icon.svg"
-                alt="Whats App"
-                className="h-10 w-10"
-              />
-            </a>
+        <div className="flex justify-between items-end gap-x-6">
+          <div>
+            <p className="mb-8 lg:mb-4">
+              Запишитесь на бесплатную консультацию{' '}
+              <button
+                className="bg-none border-none underline underline-offset-2 hover:text-primary transition-colors"
+                onClick={() => setOpenedModalType(ModalTypes.Form)}
+              >
+                тут
+              </button>
+            </p>
+            <div className="flex gap-x-3">
+              <a
+                href="https://wa.me/79117751111"
+                target="_blank"
+                rel="noreferrer"
+                className="block cursor-pointer"
+              >
+                <img
+                  src="/icons/whatsapp-white-icon.svg"
+                  alt="Whats App"
+                  className="h-10 w-10"
+                />
+              </a>
+              <a
+                href="https://t.me/+79117751111"
+                target="_blank"
+                rel="noreferrer"
+                className="block cursor-pointer"
+              >
+                <img
+                  src="/icons/telegram-white-icon.svg"
+                  alt="Whats App"
+                  className="h-10 w-10"
+                />
+              </a>
+            </div>
           </div>
-          <img src="/images/logo.png" alt="" className="w-[2.65rem]" />
+          <div>
+            <img src="/images/logo.png" alt="" className="w-[2.65rem]" />
+          </div>
         </div>
       </footer>
 
