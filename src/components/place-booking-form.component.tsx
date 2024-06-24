@@ -55,7 +55,7 @@ export default function PlaceBookingForm(props: IPlaceBookingFormProps) {
 
   const handleFormSubmit: SubmitHandler<TFormData> = async (data) => {
     const bookingLimit = Number(localStorage.getItem('booking_limit') || 0)
-    if (bookingLimit >= 5) {
+    if (bookingLimit >= 10) {
       onError?.()
       return
     }
