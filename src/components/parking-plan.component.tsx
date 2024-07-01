@@ -2,7 +2,7 @@ import { Loader, Modal, NumberFormatter } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getPantryPlaces } from '../api/get-pantry-places'
 import { getParkingPlaces } from '../api/get-parking-places'
 import { FloorRecord, FloorRecordEntries } from '../constants/floors-record.constant'
@@ -12,6 +12,7 @@ import { ParkingPlaceTypesRecord } from '../constants/parking-place-types-record
 import { ParkingPlanImagesRecord } from '../constants/parking-plan-images-record'
 import Button from '../shared-ui/button.component'
 import Link from '../shared-ui/link.component'
+import { useFloorStore } from '../stores/use-floor-store.hook'
 import { IPantryPlace } from '../types/pantry-place.type'
 import { IParkingPlace } from '../types/parking-place.type'
 import PantryPlace from './pantry-place.component'
@@ -28,6 +29,8 @@ enum ModalTypes {
 
 export default function ParkingPlan() {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
+  const floor = useFloorStore((store) => store.floor)
+  const setFloor = useFloorStore((store) => store.setFloor)
 
   const {
     data: parkingPlaces,
@@ -55,6 +58,14 @@ export default function ParkingPlan() {
   const [openedModalType, setOpenedModalType] = useState<ModalTypes | null>(null)
 
   const [zoom, setZoom] = useState(0.5)
+
+  useEffect(() => {
+    if (floor === null) {
+      return
+    }
+    setSelectedFloor(floor)
+    setFloor(null)
+  }, [floor, setFloor])
 
   if (isParkingPlacesLoading || isPantryPlacesLoading) {
     return (
