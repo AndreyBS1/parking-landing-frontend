@@ -27,15 +27,15 @@ export default function Hero() {
   return (
     <Section className="relative bg-hero bg-cover bg-left lg:bg-center flex items-center px-5 lg:px-[8.1rem]">
       <img src="/images/hero-logo.png" alt="" className="w-full lg:w-[53.95rem]" />
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-x-5">
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col lg:flex-row gap-5">
         <Button
-          className="py-4 lg:text-xl uppercase shadow-md w-[25rem]"
+          className="py-4 lg:text-xl uppercase shadow-md w-80 lg:w-[25rem]"
           onClick={() => handleButtonClick('parking')}
         >
           Купить машино-место
         </Button>
         <Button
-          className="py-4 lg:text-xl uppercase shadow-md w-[25rem]"
+          className="py-4 lg:text-xl uppercase shadow-md w-80 lg:w-[25rem]"
           onClick={() => handleButtonClick('pantry')}
         >
           Купить кладовое помещение
