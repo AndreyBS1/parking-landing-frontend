@@ -144,27 +144,35 @@ export default function ParkingPlan() {
       {isDesktop ? (
         <Section className="px-[8.05rem] flex justify-center items-center">
           <div className="flex justify-center items-end gap-x-[7.25rem]">
-            <div className="relative">
-              <img src={parkingPlanImage} alt="" className="w-[53.3rem]" />
-              {selectedFloor !== 3 &&
-                selectedFloor !== 4 &&
-                floorParkingPlaces.map((parkingPlace) => (
-                  <ParkingPlace
-                    key={parkingPlace.id}
-                    parkingPlace={parkingPlace}
+            {selectedFloor === 4 ? (
+              <img
+                src="/images/plans/fourth-floor-plan-placeholder.jpg"
+                alt=""
+                className="w-[53.3rem]"
+              />
+            ) : (
+              <div className="relative">
+                <img src={parkingPlanImage} alt="" className="w-[53.3rem]" />
+                {selectedFloor !== 3 &&
+                  selectedFloor !== 4 &&
+                  floorParkingPlaces.map((parkingPlace) => (
+                    <ParkingPlace
+                      key={parkingPlace.id}
+                      parkingPlace={parkingPlace}
+                      className="absolute"
+                      onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
+                    />
+                  ))}
+                {floorPantryPlaces.map((pantryPlace) => (
+                  <PantryPlace
+                    key={pantryPlace.id}
+                    pantryPlace={pantryPlace}
                     className="absolute"
-                    onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
+                    onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
                   />
                 ))}
-              {floorPantryPlaces.map((pantryPlace) => (
-                <PantryPlace
-                  key={pantryPlace.id}
-                  pantryPlace={pantryPlace}
-                  className="absolute"
-                  onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
-                />
-              ))}
-            </div>
+              </div>
+            )}
             <div className="w-fit">
               <div className="mb-[1.05rem] flex gap-x-[1.4rem]">
                 {FloorRecordEntries.map(([floor]) => (
