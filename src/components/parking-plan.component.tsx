@@ -280,32 +280,43 @@ export default function ParkingPlan() {
           </div>
 
           <div className="overflow-auto relative mt-6">
-            <img
-              src={parkingPlanImage}
-              alt=""
-              className="max-w-none"
-              style={{ width: `${zoom * 53}rem` }}
-            />
-            {selectedFloor !== 3 &&
-              selectedFloor !== 4 &&
-              floorParkingPlaces.map((parkingPlace) => (
-                <ParkingPlace
-                  key={parkingPlace.id}
-                  parkingPlace={parkingPlace}
-                  zoom={zoom}
-                  className="absolute"
-                  onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
-                />
-              ))}
-            {floorPantryPlaces.map((pantryPlace) => (
-              <PantryPlace
-                key={pantryPlace.id}
-                pantryPlace={pantryPlace}
-                zoom={zoom}
-                className="absolute"
-                onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
+            {selectedFloor === 4 ? (
+              <img
+                src="/images/plans/fourth-floor-plan-placeholder.jpg"
+                alt=""
+                className="max-w-none"
+                style={{ width: `${zoom * 53}rem` }}
               />
-            ))}
+            ) : (
+              <>
+                <img
+                  src={parkingPlanImage}
+                  alt=""
+                  className="max-w-none"
+                  style={{ width: `${zoom * 53}rem` }}
+                />
+                {selectedFloor !== 3 &&
+                  selectedFloor !== 4 &&
+                  floorParkingPlaces.map((parkingPlace) => (
+                    <ParkingPlace
+                      key={parkingPlace.id}
+                      parkingPlace={parkingPlace}
+                      zoom={zoom}
+                      className="absolute"
+                      onSelect={() => handlePlaceSelect(parkingPlace.id, 'parking')}
+                    />
+                  ))}
+                {floorPantryPlaces.map((pantryPlace) => (
+                  <PantryPlace
+                    key={pantryPlace.id}
+                    pantryPlace={pantryPlace}
+                    zoom={zoom}
+                    className="absolute"
+                    onSelect={() => handlePlaceSelect(pantryPlace.id, 'pantry')}
+                  />
+                ))}
+              </>
+            )}
           </div>
           <div className="my-6 flex justify-center items-center gap-x-6">
             <Button className="w-8 text-xl" onClick={handleZoomDecrease}>
